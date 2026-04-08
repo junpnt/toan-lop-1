@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bé Học Toán - Luyện Toán Lớp 1</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #FFF9E6; font-family: 'Quicksand', sans-serif; overflow-x: hidden; }
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        .star-bg { position: fixed; pointer-events: none; opacity: 0.2; z-index: 0; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- Libraries -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide-react@latest"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect, useCallback, useRef } = React;
+        const { motion, AnimatePresence } = FramerMotion;
+        const { Trophy, RefreshCw, Timer, CheckCircle2, XCircle, Heart, Star } = LucideReact;
+
+        const AVATARS = [
+            { id: 'dog', emoji: '🐶', label: 'Cún con', color: 'bg-orange-100' },
+            { id: 'cat', emoji: '🐱', label: 'Mèo nhỏ', color: 'bg-blue-100' },
+            { id: 'rabbit', emoji: '🐰', label: 'Thỏ trắng', color: 'bg-pink-100' },
+            { id: 'panda', emoji: '🐼', label: 'Gấu trúc', color: 'bg-gray-100' },
+            { id: 'lion', emoji: '🦁', label: 'Sư tử', color: 'bg-yellow-100' },
+            { id: 'frog', emoji: '🐸', label: 'Ếch xanh', color: 'bg-green-100' },
+        ];
+
+        function App() {
+            const [gameState, setGameState] = useState('start');
+            const [gameMode, setGameMode] = useState('endless');
+            const [playerName, setPlayerName] = useState('');
+            const [selectedAvatar, setSelectedAvatar] = useState(AVATARS[0]);
+            const [question, setQuestion] = useState(null);
+            const [quizQuestions, setQuizQuestions] = useState([]);
+            const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
+            const [userInput, setUserInput] = useState('');
+            const [score, setScore] = useState(0);
+            const [timeLeft, setTimeLeft] = useState(30);
+            const [feedback, setFeedback] = useState(null);
+            const [lives, setLives] = useState(3);
+            
+            const timerRef = useRef(null);
+
+            const generateSingleQuestion = useCallback(() => {
+                const isComparison = Math.random() > 0.7;
+                const id = Math.random().toString(36).substr(2, 9);
+
+                if (isComparison) {
+                    const a = Math.floor(Math.random() * 100);
+                    const b = Math.floor(Math.random() * 100);
+                    let answer = '=';
+                    if (a > b) answer = '>';
+                    else if (a < b) answer = '<';
+                    return { id, type: 'comparison', a, b, operator: '?', answer, options: ['>', '<', '='] };
+                } else {
+                    const operator = Math.random() > 0.5 ? '+' : '-';
+                    let a, b, answer;
+                    if (operator === '+') {
+                        a = Math.floor(Math.random() * 90) + 1;
+                        b = Math.floor(Math.random() * (100 - a)) + 1;
+                        answer = a + b;
+                    } else {
+                        a = Math.floor(Math.random() * 99) + 2;
+                        b = Math.floor(Math.random() * (a - 1)) + 1;
+                        answer = a - b;
+                    }
+                    const options = [answer];
+                    while (options.length < 4) {
+                        const offset = Math.floor(Math.random() * 10) - 5;
+                        const wrong = answer + offset;
+                        if (wrong >= 0 && wrong <= 100 && !options.includes(wrong)) options.push(wrong);
+                    }
+                    options.sort(() => Math.random() - 0.5);
+                    return { id, type: 'calculation', a, b, operator, answer, options };
+                }
+            }, []);
+
+            const generateQuestion = useCallback(() => {
+                setQuestion(generateSingleQuestion());
+                setUserInput('');
+                setTimeLeft(30);
+                setFeedback(null);
+            }, [generateSingleQuestion]);
+
+            const startEndless = () => {
+                setGameMode('endless');
+                setScore(0);
+                setLives(3);
+                setGameState('playing');
+                generateQuestion();
+            };
+
+            const startQuiz = () => {
+                setGameMode('quiz');
+                const qs = Array.from({ length: 10 }, () => generateSingleQuestion());
+                setQuizQuestions(qs);
+                setCurrentQuizIndex(0);
+                setScore(0);
+                setGameState('quiz');
+                setTimeLeft(30);
+            };
+
+            const handleGameOver = useCallback(() => {
+                setGameState(gameMode === 'endless' ? 'gameover' : 'quiz-result');
+                if (timerRef.current) clearInterval(timerRef.current);
+            }, [gameMode]);
+
+            const handleQuizAnswer = useCallback((ans) => {
+                const currentQ = quizQuestions[currentQuizIndex];
+                if (ans === currentQ.answer) {
+                    setScore(s => s + 1);
+                    confetti({ particleCount: 50, spread: 40, origin: { y: 0.8 } });
+                }
+                if (currentQuizIndex < 9) {
+                    setCurrentQuizIndex(i => i + 1);
+                    setTimeLeft(30);
+                } else {
+                    handleGameOver();
+                }
+            }, [quizQuestions, currentQuizIndex, handleGameOver]);
+
+            const checkAnswer = (e) => {
+                if (e) e.preventDefault();
+                if (!question || !userInput) return;
+                const isCorrect = userInput.toString() === question.answer.toString();
+                if (isCorrect) {
+                    setScore(s => s + 1);
+                    setFeedback('correct');
+                    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                    setTimeout(generateQuestion, 1000);
+                } else {
+                    setFeedback('wrong');
+                    setLives(l => {
+                        if (l <= 1) { handleGameOver(); return 0; }
+                        return l - 1;
+                    });
+                    setTimeout(() => { setFeedback(null); setUserInput(''); }, 1000);
+                }
+            };
+
+            useEffect(() => {
+                if ((gameState === 'playing' || gameState === 'quiz') && timeLeft > 0) {
+                    timerRef.current = setInterval(() => {
+                        setTimeLeft(t => {
+                            if (t <= 1) {
+                                if (gameState === 'playing') {
+                                    setLives(l => {
+                                        if (l <= 1) { handleGameOver(); return 0; }
+                                        generateQuestion();
+                                        return l - 1;
+                                    });
+                                    return 30;
+                                } else {
+                                    handleQuizAnswer('TIMEOUT');
+                                    return 30;
+                                }
+                            }
+                            return t - 1;
+                        });
+                    }, 1000);
+                }
+                return () => clearInterval(timerRef.current);
+            }, [gameState, timeLeft, generateQuestion, handleGameOver, handleQuizAnswer]);
+
+            return (
+                <div className="min-h-screen flex flex-col items-center justify-center p-4">
+                    <Star className="star-bg text-yellow-400 top-10 left-10" size={100} fill="currentColor" />
+                    <Star className="star-bg text-pink-400 bottom-10 right-10" size={80} fill="currentColor" />
+
+                    <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                        className="w-full max-w-md bg-white rounded-[40px] shadow-[0_20px_0_0_#E6E6E6] p-8 relative border-4 border-[#FFD700] z-10">
+                        
+                        {gameState === 'start' && (
+                            <div className="text-center space-y-8">
+                                <h1 className="text-5xl font-bold text-[#FF6B6B]">Bé Học Toán! 🎨</h1>
+                                <div className="text-8xl animate-bounce">🦁</div>
+                                <p className="text-xl text-gray-600 font-medium">Luyện tập cộng trừ trong phạm vi 100!</p>
+                                <button onClick={() => setGameState('setup')} className="w-full py-6 bg-[#4ECDC4] text-white text-3xl font-bold rounded-3xl shadow-[0_8px_0_0_#36918A]">BẮT ĐẦU</button>
+                            </div>
+                        )}
+
+                        {gameState === 'setup' && (
+                            <div className="space-y-6">
+                                <div className="text-center">
+                                    <h2 className="text-3xl font-bold text-[#FF6B6B]">Chào bé yêu! 👋</h2>
+                                    <p className="text-gray-500 mt-2">Nhập tên và chọn bạn đồng hành nhé</p>
+                                </div>
+                                <input type="text" value={playerName} onChange={(e) => setPlayerName(e.target.value)} placeholder="Tên của bé..."
+                                    className="w-full px-6 py-4 bg-gray-50 border-4 border-gray-200 rounded-2xl text-xl font-bold focus:outline-none focus:border-[#4ECDC4]" />
+                                <div className="grid grid-cols-3 gap-3">
+                                    {AVATARS.map(a => (
+                                        <button key={a.id} onClick={() => setSelectedAvatar(a)} 
+                                            className={`p-3 rounded-2xl border-4 flex flex-col items-center ${selectedAvatar.id === a.id ? 'border-[#4ECDC4] bg-[#E0F7F5]' : 'border-transparent bg-gray-50'}`}>
+                                            <span className="text-4xl">{a.emoji}</span>
+                                            <span className="text-xs font-bold text-gray-500">{a.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="grid grid-cols-2 gap-4 pt-4">
+                                    <button disabled={!playerName.trim()} onClick={startEndless} className={`py-5 text-white text-xl font-bold rounded-2xl shadow-[0_6px_0_0_#36918A] ${playerName.trim() ? 'bg-[#4ECDC4]' : 'bg-gray-300'}`}>VÔ TẬN ♾️</button>
+                                    <button disabled={!playerName.trim()} onClick={startQuiz} className={`py-5 text-white text-xl font-bold rounded-2xl shadow-[0_6px_0_0_#D64545] ${playerName.trim() ? 'bg-[#FF6B6B]' : 'bg-gray-300'}`}>LÀM ĐỀ 📝</button>
+                                </div>
+                            </div>
+                        )}
+
+                        {gameState === 'playing' && question && (
+                            <div className="space-y-8">
+                                <div className="flex justify-between items-center">
+                                    <div className="flex items-center gap-2">
+                                        <div className={`w-10 h-10 ${selectedAvatar.color} rounded-full flex items-center justify-center text-xl border-2 border-white`}>{selectedAvatar.emoji}</div>
+                                        <span className="font-bold text-gray-700">{playerName}</span>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <div className="flex items-center gap-1 bg-pink-50 px-2 py-1 rounded-xl border-2 border-pink-100 text-pink-600 font-bold"><Heart size={16} fill="currentColor"/>{lives}</div>
+                                        <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-xl border-2 border-yellow-100 text-yellow-600 font-bold"><Trophy size={16}/>{score}</div>
+                                    </div>
+                                </div>
+                                <div className="text-center py-10 bg-[#F8F9FA] rounded-[32px] border-4 border-dashed border-gray-200">
+                                    <div className="text-6xl font-bold text-gray-800 flex items-center justify-center gap-3">
+                                        <span>{question.a}</span><span className="text-[#FF6B6B]">{question.operator}</span><span>{question.b}</span>
+                                        {question.type === 'calculation' && <span className="text-gray-400">= ?</span>}
+                                    </div>
+                                </div>
+                                {question.type === 'comparison' ? (
+                                    <div className="grid grid-cols-3 gap-4">
+                                        {['>', '<', '='].map(op => <button key={op} onClick={() => { setUserInput(op); setTimeout(checkAnswer, 10); }} className="py-5 bg-white border-4 border-gray-200 rounded-2xl text-4xl font-bold text-gray-700 hover:border-[#4ECDC4]">{op}</button>)}
+                                    </div>
+                                ) : (
+                                    <form onSubmit={checkAnswer} className="space-y-4">
+                                        <input autoFocus type="number" value={userInput} onChange={e => setUserInput(e.target.value)} placeholder="???" className="w-full text-center text-5xl font-bold py-5 bg-gray-50 rounded-3xl border-4 border-gray-200 focus:outline-none focus:border-[#4ECDC4]" />
+                                        <button type="submit" className="w-full py-4 bg-[#FF6B6B] text-white text-2xl font-bold rounded-2xl shadow-[0_6px_0_0_#D64545]">KIỂM TRA</button>
+                                    </form>
+                                )}
+                                <AnimatePresence>{feedback && (
+                                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="absolute inset-0 flex items-center justify-center bg-white/90 rounded-3xl z-20">
+                                        <div className={`text-center ${feedback === 'correct' ? 'text-[#4ECDC4]' : 'text-[#FF6B6B]'}`}>
+                                            {feedback === 'correct' ? <CheckCircle2 size={100} className="mx-auto"/> : <XCircle size={100} className="mx-auto"/>}
+                                            <p className="text-3xl font-bold mt-2">{feedback === 'correct' ? 'ĐÚNG RỒI! 🎉' : 'THỬ LẠI NHÉ! 💪'}</p>
+                                        </div>
+                                    </motion.div>
+                                )}</AnimatePresence>
+                            </div>
+                        )}
+
+                        {gameState === 'quiz' && quizQuestions[currentQuizIndex] && (
+                            <div className="space-y-6">
+                                <div className="flex justify-between items-center text-sm font-bold">
+                                    <span className="text-blue-600">Câu {currentQuizIndex + 1} / 10</span>
+                                    <span className="text-gray-500">⏳ {timeLeft}s</span>
+                                </div>
+                                <div className="text-center py-8 bg-[#F8F9FA] rounded-[32px] border-4 border-dashed border-gray-200">
+                                    <div className="text-5xl font-bold text-gray-800">
+                                        {quizQuestions[currentQuizIndex].a} {quizQuestions[currentQuizIndex].operator} {quizQuestions[currentQuizIndex].b} {quizQuestions[currentQuizIndex].type === 'calculation' ? '= ?' : ''}
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {quizQuestions[currentQuizIndex].options.map((opt, i) => (
+                                        <button key={i} onClick={() => handleQuizAnswer(opt)} className="py-4 bg-white border-4 border-gray-100 rounded-2xl text-xl font-bold text-gray-700 hover:border-[#4ECDC4]">{String.fromCharCode(65+i)}. {opt}</button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {(gameState === 'gameover' || gameState === 'quiz-result') && (
+                            <div className="text-center space-y-8">
+                                <div className="text-8xl">{gameState === 'gameover' ? '⏰' : '🏆'}</div>
+                                <h2 className="text-3xl font-bold text-gray-700">Giỏi quá, {playerName}!</h2>
+                                <div className="bg-yellow-50 p-6 rounded-3xl border-2 border-yellow-200">
+                                    <p className="text-xl text-gray-500 font-bold">Kết quả của bé:</p>
+                                    <p className="text-7xl font-black text-yellow-600">{score}{gameState === 'quiz-result' ? '/10' : ''}</p>
+                                </div>
+                                <button onClick={() => setGameState('setup')} className="w-full py-5 bg-[#4ECDC4] text-white text-2xl font-bold rounded-2xl shadow-[0_8px_0_0_#36918A]">CHƠI LẠI <RefreshCw className="inline ml-2" size={24}/></button>
+                            </div>
+                        )}
+                    </motion.div>
+                    <p className="mt-8 text-gray-400 font-medium">Học toán thật vui cùng Bé Học Toán!</p>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
