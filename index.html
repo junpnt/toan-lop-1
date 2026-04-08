@@ -3,310 +3,637 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bé Học Toán - Luyện Toán Lớp 1</title>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Quicksand', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
+    <title>Bé Học Toán 1 - Ngoại Tuyến</title>
     <style>
-        body { background-color: #FFF9E6; font-family: 'Quicksand', sans-serif; overflow-x: hidden; }
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        .star-bg { position: fixed; pointer-events: none; opacity: 0.2; z-index: 0; }
+        :root {
+            --primary: #4ECDC4;
+            --primary-dark: #36918A;
+            --secondary: #FF6B6B;
+            --secondary-dark: #D64545;
+            --accent: #FFD700;
+            --bg: #FFF9E6;
+            --white: #ffffff;
+            --gray: #f8f9fa;
+            --text: #4a4a4a;
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: var(--bg); margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; color: var(--text); }
+
+        /* Giao diện chính */
+        .container {
+            width: 95%;
+            max-width: 450px;
+            background: var(--white);
+            border-radius: 40px;
+            box-shadow: 0 20px 0 0 #e6e6e6;
+            border: 4px solid var(--accent);
+            padding: 1.5rem;
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        h1 { color: var(--secondary); font-size: 2.2rem; margin-bottom: 0.5rem; }
+        p { font-size: 1rem; color: #666; font-weight: 500; }
+
+        .screen { display: none; flex-direction: column; gap: 1.2rem; }
+        .screen.active { display: flex; }
+
+        /* Nút bấm */
+        .btn {
+            padding: 1rem;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s, filter 0.2s;
+            color: white;
+            box-shadow: 0 6px 0 0 rgba(0,0,0,0.1);
+        }
+        .btn:active { transform: translateY(4px); box-shadow: none; }
+        .btn-primary { background: var(--primary); box-shadow: 0 6px 0 0 var(--primary-dark); }
+        .btn-secondary { background: var(--secondary); box-shadow: 0 6px 0 0 var(--secondary-dark); }
+        .btn:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
+
+        /* Input & Setup */
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 15px;
+            border: 3px solid #eee;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+            outline: none;
+        }
+        input:focus { border-color: var(--primary); }
+
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        
+        /* Avatar Box - Sửa lại thành lưới 3 cột */
+        .avatar-box {
+            max-height: 220px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 2px dashed #eee;
+            border-radius: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .avatar-item {
+            padding: 10px;
+            background: #fdfdfd;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        .avatar-item.selected { border-color: var(--primary); background: #e0f7f5; transform: scale(1.05); }
+        .avatar-emoji { font-size: 2.2rem; }
+        .avatar-label { font-size: 0.65rem; font-weight: bold; color: #888; margin-top: 4px; }
+
+        .diff-btn {
+            padding: 8px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            background: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .diff-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Game Play */
+        .stats { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .stat-item { background: #fff5f5; padding: 5px 12px; border-radius: 12px; border: 2px solid #ffe3e3; font-weight: bold; font-size: 0.9rem; }
+        
+        .question-card {
+            background: var(--gray);
+            padding: 1.5rem;
+            border-radius: 30px;
+            border: 4px dashed #eee;
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+        .timer-bar { font-weight: bold; color: #888; margin-bottom: 5px; font-size: 0.9rem; }
+        .timer-low { color: var(--secondary); animation: pulse 1s infinite; }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        /* Feedback Overlay */
+        #feedback {
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border-radius: 36px;
+            z-index: 100;
+        }
+        #feedback.active { display: flex; }
+        .feedback-icon { font-size: 5rem; }
+        .feedback-text { font-size: 2rem; font-weight: bold; margin-top: 10px; }
+
+        /* Background Stars */
+        .star { position: fixed; opacity: 0.15; z-index: 0; pointer-events: none; }
+
+        /* Scrollbar */
+        .avatar-box::-webkit-scrollbar { width: 6px; }
+        .avatar-box::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        /* Quiz Options */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .opt-btn {
+            padding: 12px;
+            background: white;
+            border: 3px solid #eee;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .opt-btn:hover { border-color: var(--primary); background: #f0fdfb; }
+
+        /* Audio Toggle */
+        .audio-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
-    <div id="root"></div>
 
-    <!-- Libraries -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://unpkg.com/lucide-react@latest"></script>
-    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <div class="audio-toggle" id="audioToggle">🔊</div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useCallback, useRef } = React;
-        const { motion, AnimatePresence } = FramerMotion;
-        const { Trophy, RefreshCw, Timer, CheckCircle2, XCircle, Heart, Star } = LucideReact;
+    <!-- Background Decorations -->
+    <div class="star" style="top:10%; left:10%; font-size: 100px;">⭐</div>
+    <div class="star" style="bottom:10%; right:10%; font-size: 80px;">⭐</div>
 
-        const AVATARS = [
-            { id: 'dog', emoji: '🐶', label: 'Cún con', color: 'bg-orange-100' },
-            { id: 'cat', emoji: '🐱', label: 'Mèo nhỏ', color: 'bg-blue-100' },
-            { id: 'rabbit', emoji: '🐰', label: 'Thỏ trắng', color: 'bg-pink-100' },
-            { id: 'panda', emoji: '🐼', label: 'Gấu trúc', color: 'bg-gray-100' },
-            { id: 'lion', emoji: '🦁', label: 'Sư tử', color: 'bg-yellow-100' },
-            { id: 'frog', emoji: '🐸', label: 'Ếch xanh', color: 'bg-green-100' },
+    <div class="container">
+        <!-- Feedback Overlay -->
+        <div id="feedback">
+            <div class="feedback-icon" id="feedbackIcon">🎉</div>
+            <div class="feedback-text" id="feedbackText">ĐÚNG RỒI!</div>
+        </div>
+
+        <!-- Screen: Start -->
+        <div id="screen-start" class="screen active">
+            <h1>Bé Học Toán 1! 🎨</h1>
+            <div style="font-size: 7rem;">🦁</div>
+            <p>Học toán thật vui mỗi ngày cùng bạn nhỏ!</p>
+            <button class="btn btn-primary" onclick="showScreen('setup')">BẮT ĐẦU</button>
+        </div>
+
+        <!-- Screen: Setup -->
+        <div id="screen-setup" class="screen">
+            <h2 style="color: var(--secondary); margin: 0; font-size: 1.5rem;">Chào bé yêu! 👋</h2>
+            
+            <div style="text-align: left;">
+                <label style="font-weight: bold; font-size: 0.85rem; color: #888;">Tên của bé:</label>
+                <input type="text" id="playerName" placeholder="Nhập tên bé..." oninput="validateSetup()" style="margin-top: 5px;">
+            </div>
+
+            <div style="text-align: left;">
+                <label style="font-weight: bold; font-size: 0.85rem; color: #888;">Chọn độ khó:</label>
+                <div class="grid-3" style="margin-top: 5px;">
+                    <button class="diff-btn" onclick="setDifficulty('easy', this)">Dễ</button>
+                    <button class="diff-btn selected" onclick="setDifficulty('medium', this)">Vừa</button>
+                    <button class="diff-btn" onclick="setDifficulty('hard', this)">Khó</button>
+                </div>
+            </div>
+
+            <div style="text-align: left;">
+                <label style="font-weight: bold; font-size: 0.85rem; color: #888;">Chọn bạn đồng hành:</label>
+                <div class="avatar-box" id="avatarList" style="margin-top: 5px;">
+                    <!-- Avatars will be injected here -->
+                </div>
+            </div>
+
+            <div class="grid-3" style="grid-template-columns: 1fr 1fr; gap: 15px;">
+                <button class="btn btn-primary" id="btnEndless" onclick="startGame('endless')" disabled>VÔ TẬN ♾️</button>
+                <button class="btn btn-secondary" id="btnQuiz" onclick="startGame('quiz')" disabled>LÀM ĐỀ 📝</button>
+            </div>
+        </div>
+
+        <!-- Screen: Playing (Endless) -->
+        <div id="screen-playing" class="screen">
+            <div class="stats">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div id="playAvatar" style="font-size: 1.8rem; background: #eee; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">🐶</div>
+                    <span id="playName" style="font-weight: bold; font-size: 0.9rem;">Bé</span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <div class="stat-item" style="color: #ff4d4d;">❤️ <span id="lives">3</span></div>
+                    <div class="stat-item" style="color: #ffcc00;">🏆 <span id="score">0</span></div>
+                </div>
+            </div>
+            <div class="timer-bar" id="timerDisplay">⏳ 30 giây còn lại</div>
+            <div class="question-card" id="questionText">10 + 5</div>
+            
+            <div id="inputArea">
+                <input type="number" id="answerInput" placeholder="???" style="font-size: 2.5rem; padding: 1rem;">
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 15px;" onclick="checkAnswer()">KIỂM TRA</button>
+            </div>
+            <div id="compareArea" class="grid-3" style="display: none;">
+                <button class="btn btn-primary" style="font-size: 2rem;" onclick="submitCompare('>')">></button>
+                <button class="btn btn-primary" style="font-size: 2rem;" onclick="submitCompare('<')"><</button>
+                <button class="btn btn-primary" style="font-size: 2rem;" onclick="submitCompare('=')">=</button>
+            </div>
+        </div>
+
+        <!-- Screen: Quiz -->
+        <div id="screen-quiz" class="screen">
+            <div class="stats">
+                <div id="quizProgress" style="font-weight: bold; color: var(--primary);">Câu 1 / 10</div>
+                <div id="quizTimer" style="font-weight: bold; color: #888;">⏳ 30s</div>
+            </div>
+            <div class="question-card" id="quizQuestionText" style="font-size: 2.2rem;">20 + 30</div>
+            <div class="options-grid" id="quizOptions">
+                <!-- Options injected here -->
+            </div>
+        </div>
+
+        <!-- Screen: Result -->
+        <div id="screen-result" class="screen">
+            <div id="resultIcon" style="font-size: 7rem;">🏆</div>
+            <h2 id="resultTitle" style="font-size: 1.5rem;">Giỏi quá!</h2>
+            <div style="background: #fff9e6; padding: 15px; border-radius: 30px; border: 2px solid #ffeeba;">
+                <p style="margin: 0;">Kết quả của bé:</p>
+                <div id="resultScore" style="font-size: 4rem; font-weight: 900; color: #ffcc00;">10/10</div>
+            </div>
+            <button class="btn btn-primary" onclick="showScreen('setup')">CHƠI LẠI</button>
+        </div>
+    </div>
+
+    <canvas id="confetti-canvas" style="position: fixed; inset: 0; pointer-events: none; z-index: 1000;"></canvas>
+
+    <script>
+        // --- DATA ---
+        const avatars = [
+            { id: 'dog', emoji: '🐶', label: 'Cún con' }, { id: 'cat', emoji: '🐱', label: 'Mèo nhỏ' },
+            { id: 'rabbit', emoji: '🐰', label: 'Thỏ trắng' }, { id: 'panda', emoji: '🐼', label: 'Gấu trúc' },
+            { id: 'lion', emoji: '🦁', label: 'Sư tử' }, { id: 'frog', emoji: '🐸', label: 'Ếch xanh' },
+            { id: 'monkey', emoji: '🐒', label: 'Khỉ con' }, { id: 'pig', emoji: '🐷', label: 'Heo hồng' },
+            { id: 'chick', emoji: '🐥', label: 'Gà chíp' }, { id: 'penguin', emoji: '🐧', label: 'Cánh cụt' },
+            { id: 'koala', emoji: '🐨', label: 'Koala' }, { id: 'fox', emoji: '🦊', label: 'Cáo nhỏ' },
+            { id: 'tiger', emoji: '🐯', label: 'Hổ con' }, { id: 'elephant', emoji: '🐘', label: 'Voi con' },
+            { id: 'whale', emoji: '🐳', label: 'Cá voi' }, { id: 'bee', emoji: '🐝', label: 'Ong mật' },
+            { id: 'ladybug', emoji: '🐞', label: 'Bọ rùa' }, { id: 'butterfly', emoji: '🦋', label: 'Bướm xinh' },
+            { id: 'unicorn', emoji: '🦄', label: 'Kỳ lân' }, { id: 'dragon', emoji: '🐲', label: 'Rồng nhỏ' },
+            { id: 'giraffe', emoji: '🦒', label: 'Hươu cao' }, { id: 'zebra', emoji: '🦓', label: 'Ngựa vằn' },
+            { id: 'owl', emoji: '🦉', label: 'Cú mèo' }, { id: 'octopus', emoji: '🐙', label: 'Bạch tuộc' },
+            { id: 'shark', emoji: '🦈', label: 'Cá mập' }, { id: 'turtle', emoji: '🐢', label: 'Rùa con' },
+            { id: 'dino', emoji: '🦖', label: 'Khủng long' }
         ];
 
-        function App() {
-            const [gameState, setGameState] = useState('start');
-            const [gameMode, setGameMode] = useState('endless');
-            const [playerName, setPlayerName] = useState('');
-            const [selectedAvatar, setSelectedAvatar] = useState(AVATARS[0]);
-            const [question, setQuestion] = useState(null);
-            const [quizQuestions, setQuizQuestions] = useState([]);
-            const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
-            const [userInput, setUserInput] = useState('');
-            const [score, setScore] = useState(0);
-            const [timeLeft, setTimeLeft] = useState(30);
-            const [feedback, setFeedback] = useState(null);
-            const [lives, setLives] = useState(3);
-            
-            const timerRef = useRef(null);
+        // --- STATE ---
+        let state = {
+            playerName: '',
+            selectedAvatar: avatars[0],
+            difficulty: 'medium',
+            gameMode: 'endless',
+            score: 0,
+            lives: 3,
+            timeLeft: 30,
+            currentQuestion: null,
+            quizIndex: 0,
+            quizQuestions: [],
+            isAudioOn: true
+        };
 
-            const generateSingleQuestion = useCallback(() => {
-                const isComparison = Math.random() > 0.7;
-                const id = Math.random().toString(36).substr(2, 9);
+        let timerInterval = null;
 
-                if (isComparison) {
-                    const a = Math.floor(Math.random() * 100);
-                    const b = Math.floor(Math.random() * 100);
-                    let answer = '=';
-                    if (a > b) answer = '>';
-                    else if (a < b) answer = '<';
-                    return { id, type: 'comparison', a, b, operator: '?', answer, options: ['>', '<', '='] };
-                } else {
-                    const operator = Math.random() > 0.5 ? '+' : '-';
-                    let a, b, answer;
-                    if (operator === '+') {
-                        a = Math.floor(Math.random() * 90) + 1;
-                        b = Math.floor(Math.random() * (100 - a)) + 1;
-                        answer = a + b;
-                    } else {
-                        a = Math.floor(Math.random() * 99) + 2;
-                        b = Math.floor(Math.random() * (a - 1)) + 1;
-                        answer = a - b;
-                    }
-                    const options = [answer];
-                    while (options.length < 4) {
-                        const offset = Math.floor(Math.random() * 10) - 5;
-                        const wrong = answer + offset;
-                        if (wrong >= 0 && wrong <= 100 && !options.includes(wrong)) options.push(wrong);
-                    }
-                    options.sort(() => Math.random() - 0.5);
-                    return { id, type: 'calculation', a, b, operator, answer, options };
-                }
-            }, []);
-
-            const generateQuestion = useCallback(() => {
-                setQuestion(generateSingleQuestion());
-                setUserInput('');
-                setTimeLeft(30);
-                setFeedback(null);
-            }, [generateSingleQuestion]);
-
-            const startEndless = () => {
-                setGameMode('endless');
-                setScore(0);
-                setLives(3);
-                setGameState('playing');
-                generateQuestion();
-            };
-
-            const startQuiz = () => {
-                setGameMode('quiz');
-                const qs = Array.from({ length: 10 }, () => generateSingleQuestion());
-                setQuizQuestions(qs);
-                setCurrentQuizIndex(0);
-                setScore(0);
-                setGameState('quiz');
-                setTimeLeft(30);
-            };
-
-            const handleGameOver = useCallback(() => {
-                setGameState(gameMode === 'endless' ? 'gameover' : 'quiz-result');
-                if (timerRef.current) clearInterval(timerRef.current);
-            }, [gameMode]);
-
-            const handleQuizAnswer = useCallback((ans) => {
-                const currentQ = quizQuestions[currentQuizIndex];
-                if (ans === currentQ.answer) {
-                    setScore(s => s + 1);
-                    confetti({ particleCount: 50, spread: 40, origin: { y: 0.8 } });
-                }
-                if (currentQuizIndex < 9) {
-                    setCurrentQuizIndex(i => i + 1);
-                    setTimeLeft(30);
-                } else {
-                    handleGameOver();
-                }
-            }, [quizQuestions, currentQuizIndex, handleGameOver]);
-
-            const checkAnswer = (e) => {
-                if (e) e.preventDefault();
-                if (!question || !userInput) return;
-                const isCorrect = userInput.toString() === question.answer.toString();
-                if (isCorrect) {
-                    setScore(s => s + 1);
-                    setFeedback('correct');
-                    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                    setTimeout(generateQuestion, 1000);
-                } else {
-                    setFeedback('wrong');
-                    setLives(l => {
-                        if (l <= 1) { handleGameOver(); return 0; }
-                        return l - 1;
-                    });
-                    setTimeout(() => { setFeedback(null); setUserInput(''); }, 1000);
-                }
-            };
-
-            useEffect(() => {
-                if ((gameState === 'playing' || gameState === 'quiz') && timeLeft > 0) {
-                    timerRef.current = setInterval(() => {
-                        setTimeLeft(t => {
-                            if (t <= 1) {
-                                if (gameState === 'playing') {
-                                    setLives(l => {
-                                        if (l <= 1) { handleGameOver(); return 0; }
-                                        generateQuestion();
-                                        return l - 1;
-                                    });
-                                    return 30;
-                                } else {
-                                    handleQuizAnswer('TIMEOUT');
-                                    return 30;
-                                }
-                            }
-                            return t - 1;
-                        });
-                    }, 1000);
-                }
-                return () => clearInterval(timerRef.current);
-            }, [gameState, timeLeft, generateQuestion, handleGameOver, handleQuizAnswer]);
-
-            return (
-                <div className="min-h-screen flex flex-col items-center justify-center p-4">
-                    <Star className="star-bg text-yellow-400 top-10 left-10" size={100} fill="currentColor" />
-                    <Star className="star-bg text-pink-400 bottom-10 right-10" size={80} fill="currentColor" />
-
-                    <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                        className="w-full max-w-md bg-white rounded-[40px] shadow-[0_20px_0_0_#E6E6E6] p-8 relative border-4 border-[#FFD700] z-10">
-                        
-                        {gameState === 'start' && (
-                            <div className="text-center space-y-8">
-                                <h1 className="text-5xl font-bold text-[#FF6B6B]">Bé Học Toán! 🎨</h1>
-                                <div className="text-8xl animate-bounce">🦁</div>
-                                <p className="text-xl text-gray-600 font-medium">Luyện tập cộng trừ trong phạm vi 100!</p>
-                                <button onClick={() => setGameState('setup')} className="w-full py-6 bg-[#4ECDC4] text-white text-3xl font-bold rounded-3xl shadow-[0_8px_0_0_#36918A]">BẮT ĐẦU</button>
-                            </div>
-                        )}
-
-                        {gameState === 'setup' && (
-                            <div className="space-y-6">
-                                <div className="text-center">
-                                    <h2 className="text-3xl font-bold text-[#FF6B6B]">Chào bé yêu! 👋</h2>
-                                    <p className="text-gray-500 mt-2">Nhập tên và chọn bạn đồng hành nhé</p>
-                                </div>
-                                <input type="text" value={playerName} onChange={(e) => setPlayerName(e.target.value)} placeholder="Tên của bé..."
-                                    className="w-full px-6 py-4 bg-gray-50 border-4 border-gray-200 rounded-2xl text-xl font-bold focus:outline-none focus:border-[#4ECDC4]" />
-                                <div className="grid grid-cols-3 gap-3">
-                                    {AVATARS.map(a => (
-                                        <button key={a.id} onClick={() => setSelectedAvatar(a)} 
-                                            className={`p-3 rounded-2xl border-4 flex flex-col items-center ${selectedAvatar.id === a.id ? 'border-[#4ECDC4] bg-[#E0F7F5]' : 'border-transparent bg-gray-50'}`}>
-                                            <span className="text-4xl">{a.emoji}</span>
-                                            <span className="text-xs font-bold text-gray-500">{a.label}</span>
-                                        </button>
-                                    ))}
-                                </div>
-                                <div className="grid grid-cols-2 gap-4 pt-4">
-                                    <button disabled={!playerName.trim()} onClick={startEndless} className={`py-5 text-white text-xl font-bold rounded-2xl shadow-[0_6px_0_0_#36918A] ${playerName.trim() ? 'bg-[#4ECDC4]' : 'bg-gray-300'}`}>VÔ TẬN ♾️</button>
-                                    <button disabled={!playerName.trim()} onClick={startQuiz} className={`py-5 text-white text-xl font-bold rounded-2xl shadow-[0_6px_0_0_#D64545] ${playerName.trim() ? 'bg-[#FF6B6B]' : 'bg-gray-300'}`}>LÀM ĐỀ 📝</button>
-                                </div>
-                            </div>
-                        )}
-
-                        {gameState === 'playing' && question && (
-                            <div className="space-y-8">
-                                <div className="flex justify-between items-center">
-                                    <div className="flex items-center gap-2">
-                                        <div className={`w-10 h-10 ${selectedAvatar.color} rounded-full flex items-center justify-center text-xl border-2 border-white`}>{selectedAvatar.emoji}</div>
-                                        <span className="font-bold text-gray-700">{playerName}</span>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <div className="flex items-center gap-1 bg-pink-50 px-2 py-1 rounded-xl border-2 border-pink-100 text-pink-600 font-bold"><Heart size={16} fill="currentColor"/>{lives}</div>
-                                        <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-xl border-2 border-yellow-100 text-yellow-600 font-bold"><Trophy size={16}/>{score}</div>
-                                    </div>
-                                </div>
-                                <div className="text-center py-10 bg-[#F8F9FA] rounded-[32px] border-4 border-dashed border-gray-200">
-                                    <div className="text-6xl font-bold text-gray-800 flex items-center justify-center gap-3">
-                                        <span>{question.a}</span><span className="text-[#FF6B6B]">{question.operator}</span><span>{question.b}</span>
-                                        {question.type === 'calculation' && <span className="text-gray-400">= ?</span>}
-                                    </div>
-                                </div>
-                                {question.type === 'comparison' ? (
-                                    <div className="grid grid-cols-3 gap-4">
-                                        {['>', '<', '='].map(op => <button key={op} onClick={() => { setUserInput(op); setTimeout(checkAnswer, 10); }} className="py-5 bg-white border-4 border-gray-200 rounded-2xl text-4xl font-bold text-gray-700 hover:border-[#4ECDC4]">{op}</button>)}
-                                    </div>
-                                ) : (
-                                    <form onSubmit={checkAnswer} className="space-y-4">
-                                        <input autoFocus type="number" value={userInput} onChange={e => setUserInput(e.target.value)} placeholder="???" className="w-full text-center text-5xl font-bold py-5 bg-gray-50 rounded-3xl border-4 border-gray-200 focus:outline-none focus:border-[#4ECDC4]" />
-                                        <button type="submit" className="w-full py-4 bg-[#FF6B6B] text-white text-2xl font-bold rounded-2xl shadow-[0_6px_0_0_#D64545]">KIỂM TRA</button>
-                                    </form>
-                                )}
-                                <AnimatePresence>{feedback && (
-                                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="absolute inset-0 flex items-center justify-center bg-white/90 rounded-3xl z-20">
-                                        <div className={`text-center ${feedback === 'correct' ? 'text-[#4ECDC4]' : 'text-[#FF6B6B]'}`}>
-                                            {feedback === 'correct' ? <CheckCircle2 size={100} className="mx-auto"/> : <XCircle size={100} className="mx-auto"/>}
-                                            <p className="text-3xl font-bold mt-2">{feedback === 'correct' ? 'ĐÚNG RỒI! 🎉' : 'THỬ LẠI NHÉ! 💪'}</p>
-                                        </div>
-                                    </motion.div>
-                                )}</AnimatePresence>
-                            </div>
-                        )}
-
-                        {gameState === 'quiz' && quizQuestions[currentQuizIndex] && (
-                            <div className="space-y-6">
-                                <div className="flex justify-between items-center text-sm font-bold">
-                                    <span className="text-blue-600">Câu {currentQuizIndex + 1} / 10</span>
-                                    <span className="text-gray-500">⏳ {timeLeft}s</span>
-                                </div>
-                                <div className="text-center py-8 bg-[#F8F9FA] rounded-[32px] border-4 border-dashed border-gray-200">
-                                    <div className="text-5xl font-bold text-gray-800">
-                                        {quizQuestions[currentQuizIndex].a} {quizQuestions[currentQuizIndex].operator} {quizQuestions[currentQuizIndex].b} {quizQuestions[currentQuizIndex].type === 'calculation' ? '= ?' : ''}
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    {quizQuestions[currentQuizIndex].options.map((opt, i) => (
-                                        <button key={i} onClick={() => handleQuizAnswer(opt)} className="py-4 bg-white border-4 border-gray-100 rounded-2xl text-xl font-bold text-gray-700 hover:border-[#4ECDC4]">{String.fromCharCode(65+i)}. {opt}</button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {(gameState === 'gameover' || gameState === 'quiz-result') && (
-                            <div className="text-center space-y-8">
-                                <div className="text-8xl">{gameState === 'gameover' ? '⏰' : '🏆'}</div>
-                                <h2 className="text-3xl font-bold text-gray-700">Giỏi quá, {playerName}!</h2>
-                                <div className="bg-yellow-50 p-6 rounded-3xl border-2 border-yellow-200">
-                                    <p className="text-xl text-gray-500 font-bold">Kết quả của bé:</p>
-                                    <p className="text-7xl font-black text-yellow-600">{score}{gameState === 'quiz-result' ? '/10' : ''}</p>
-                                </div>
-                                <button onClick={() => setGameState('setup')} className="w-full py-5 bg-[#4ECDC4] text-white text-2xl font-bold rounded-2xl shadow-[0_8px_0_0_#36918A]">CHƠI LẠI <RefreshCw className="inline ml-2" size={24}/></button>
-                            </div>
-                        )}
-                    </motion.div>
-                    <p className="mt-8 text-gray-400 font-medium">Học toán thật vui cùng Bé Học Toán!</p>
-                </div>
-            );
+        // --- AUDIO ENGINE (Offline Synthesizer) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq, type, duration) {
+            if (!state.isAudioOn) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        function soundCorrect() { playTone(523.25, 'sine', 0.3); setTimeout(() => playTone(659.25, 'sine', 0.4), 100); }
+        function soundWrong() { playTone(220, 'sawtooth', 0.5); }
+        function soundClick() { playTone(440, 'sine', 0.1); }
+
+        // --- CORE LOGIC ---
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen-' + id).classList.add('active');
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        function setDifficulty(d, btn) {
+            state.difficulty = d;
+            document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            soundClick();
+        }
+
+        function validateSetup() {
+            const name = document.getElementById('playerName').value.trim();
+            state.playerName = name;
+            const isValid = name.length > 0;
+            document.getElementById('btnEndless').disabled = !isValid;
+            document.getElementById('btnQuiz').disabled = !isValid;
+        }
+
+        function initAvatars() {
+            const container = document.getElementById('avatarList');
+            container.innerHTML = '';
+            avatars.forEach(a => {
+                const div = document.createElement('div');
+                div.className = 'avatar-item' + (a.id === state.selectedAvatar.id ? ' selected' : '');
+                div.innerHTML = `<span class="avatar-emoji">${a.emoji}</span><span class="avatar-label">${a.label}</span>`;
+                div.onclick = () => {
+                    state.selectedAvatar = a;
+                    document.querySelectorAll('.avatar-item').forEach(i => i.classList.remove('selected'));
+                    div.classList.add('selected');
+                    soundClick();
+                };
+                container.appendChild(div);
+            });
+        }
+
+        function getSettings() {
+            if (state.difficulty === 'easy') return { range: 20, time: 45 };
+            if (state.difficulty === 'hard') return { range: 100, time: 15 };
+            return { range: 50, time: 30 };
+        }
+
+        function generateQuestion() {
+            const { range } = getSettings();
+            const isCompare = Math.random() > 0.7;
+            
+            if (isCompare) {
+                const a = Math.floor(Math.random() * range);
+                const b = Math.floor(Math.random() * range);
+                let ans = a > b ? '>' : (a < b ? '<' : '=');
+                return { type: 'compare', a, b, ans, text: `${a} ? ${b}` };
+            } else {
+                const op = Math.random() > 0.5 ? '+' : '-';
+                let a, b, ans;
+                if (op === '+') {
+                    a = Math.floor(Math.random() * (range - 1)) + 1;
+                    b = Math.floor(Math.random() * (range - a)) + 1;
+                    ans = a + b;
+                } else {
+                    a = Math.floor(Math.random() * (range - 1)) + 2;
+                    b = Math.floor(Math.random() * (a - 1)) + 1;
+                    ans = a - b;
+                }
+                return { type: 'calc', a, b, op, ans, text: `${a} ${op} ${b} = ?` };
+            }
+        }
+
+        function startGame(mode) {
+            state.gameMode = mode;
+            state.score = 0;
+            state.lives = 3;
+            state.quizIndex = 0;
+            const { time } = getSettings();
+            state.timeLeft = time;
+
+            document.getElementById('playName').innerText = state.playerName;
+            document.getElementById('playAvatar').innerText = state.selectedAvatar.emoji;
+
+            if (mode === 'endless') {
+                showScreen('playing');
+                nextQuestion();
+            } else {
+                state.quizQuestions = Array.from({ length: 10 }, generateQuestion);
+                showScreen('quiz');
+                renderQuiz();
+            }
+            startTimer();
+            soundClick();
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                state.timeLeft--;
+                updateTimerUI();
+                if (state.timeLeft <= 0) {
+                    if (state.gameMode === 'endless') {
+                        loseLife();
+                    } else {
+                        nextQuiz(false);
+                    }
+                }
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            const display = state.gameMode === 'endless' ? 'timerDisplay' : 'quizTimer';
+            const el = document.getElementById(display);
+            el.innerText = `⏳ ${state.timeLeft} giây còn lại`;
+            if (state.timeLeft < 10) el.classList.add('timer-low');
+            else el.classList.remove('timer-low');
+        }
+
+        function nextQuestion() {
+            state.currentQuestion = generateQuestion();
+            document.getElementById('questionText').innerText = state.currentQuestion.text;
+            document.getElementById('answerInput').value = '';
+            const { time } = getSettings();
+            state.timeLeft = time;
+            
+            if (state.currentQuestion.type === 'compare') {
+                document.getElementById('inputArea').style.display = 'none';
+                document.getElementById('compareArea').style.display = 'grid';
+            } else {
+                document.getElementById('inputArea').style.display = 'block';
+                document.getElementById('compareArea').style.display = 'none';
+                document.getElementById('answerInput').focus();
+            }
+        }
+
+        function checkAnswer() {
+            const input = document.getElementById('answerInput').value;
+            if (input === '') return;
+            if (parseInt(input) === state.currentQuestion.ans) {
+                correct();
+            } else {
+                wrong();
+            }
+        }
+
+        function submitCompare(val) {
+            if (val === state.currentQuestion.ans) correct();
+            else wrong();
+        }
+
+        function correct() {
+            state.score++;
+            document.getElementById('score').innerText = state.score;
+            showFeedback(true);
+            soundCorrect();
+            fireConfetti();
+            setTimeout(nextQuestion, 1000);
+        }
+
+        function wrong() {
+            showFeedback(false);
+            soundWrong();
+            loseLife();
+            setTimeout(() => {
+                if (state.lives > 0) nextQuestion();
+            }, 1000);
+        }
+
+        function loseLife() {
+            state.lives--;
+            document.getElementById('lives').innerText = state.lives;
+            if (state.lives <= 0) endGame();
+        }
+
+        function renderQuiz() {
+            const q = state.quizQuestions[state.quizIndex];
+            document.getElementById('quizProgress').innerText = `Câu ${state.quizIndex + 1} / 10`;
+            document.getElementById('quizQuestionText').innerText = q.text.replace('= ?', '');
+            
+            const options = [q.ans];
+            const { range } = getSettings();
+            while (options.length < 4) {
+                let off = Math.floor(Math.random() * 10) - 5;
+                let w = (typeof q.ans === 'number') ? q.ans + off : ['>', '<', '='][Math.floor(Math.random()*3)];
+                if (w !== q.ans && !options.includes(w) && (typeof w !== 'number' || w >= 0)) options.push(w);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const container = document.getElementById('quizOptions');
+            container.innerHTML = '';
+            options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerText = `${String.fromCharCode(65+i)}. ${opt}`;
+                btn.onclick = () => nextQuiz(opt === q.ans);
+                container.appendChild(btn);
+            });
+            const { time } = getSettings();
+            state.timeLeft = time;
+        }
+
+        function nextQuiz(isCorrect) {
+            if (isCorrect) {
+                state.score++;
+                soundCorrect();
+                fireConfetti();
+            } else {
+                soundWrong();
+            }
+
+            if (state.quizIndex < 9) {
+                state.quizIndex++;
+                renderQuiz();
+            } else {
+                endGame();
+            }
+        }
+
+        function showFeedback(isCorrect) {
+            const fb = document.getElementById('feedback');
+            const icon = document.getElementById('feedbackIcon');
+            const text = document.getElementById('feedbackText');
+            
+            fb.classList.add('active');
+            icon.innerText = isCorrect ? '🎉' : '💪';
+            text.innerText = isCorrect ? 'ĐÚNG RỒI!' : 'THỬ LẠI NHÉ!';
+            text.style.color = isCorrect ? 'var(--primary)' : 'var(--secondary)';
+
+            setTimeout(() => fb.classList.remove('active'), 1000);
+        }
+
+        function endGame() {
+            showScreen('result');
+            const isQuiz = state.gameMode === 'quiz';
+            document.getElementById('resultTitle').innerText = isQuiz ? `Kết quả của ${state.playerName}` : `Giỏi quá, ${state.playerName}!`;
+            document.getElementById('resultScore').innerText = isQuiz ? `${state.score}/10` : state.score;
+            document.getElementById('resultIcon').innerText = (isQuiz && state.score < 5) ? '📚' : '🏆';
+            if (state.score >= 8 || (!isQuiz && state.score > 20)) fireConfetti();
+        }
+
+        // --- CONFETTI (Internal) ---
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function fireConfetti() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: window.innerWidth / 2,
+                    y: window.innerHeight * 0.8,
+                    vx: (Math.random() - 0.5) * 15,
+                    vy: -Math.random() * 20,
+                    size: Math.random() * 10 + 5,
+                    color: `hsl(${Math.random() * 360}, 70%, 60%)`,
+                    rot: Math.random() * 360
+                });
+            }
+            if (particles.length === 100) requestAnimationFrame(updateConfetti);
+        }
+
+        function updateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.5;
+                p.rot += 5;
+                ctx.fillStyle = p.color;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rot * Math.PI / 180);
+                ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                ctx.restore();
+                if (p.y > canvas.height) particles.splice(i, 1);
+            });
+            if (particles.length > 0) requestAnimationFrame(updateConfetti);
+        }
+
+        // --- AUDIO TOGGLE ---
+        document.getElementById('audioToggle').onclick = function() {
+            state.isAudioOn = !state.isAudioOn;
+            this.innerText = state.isAudioOn ? '🔊' : '🔇';
+            if (state.isAudioOn) audioCtx.resume();
+        };
+
+        // --- INIT ---
+        initAvatars();
+        document.getElementById('answerInput').onkeyup = (e) => { if (e.key === 'Enter') checkAnswer(); };
+
     </script>
 </body>
 </html>
