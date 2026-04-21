@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -44,16 +44,24 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
         }
+        /* Be Vietnam Pro cho tiêu đề - font được thiết kế riêng cho tiếng Việt,
+           hiển thị dấu (ă, â, ê, ô, ơ, ư, đ) cân đối tuyệt đối */
         .display-font {
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
             font-weight: 800;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.01em;
         }
         .brand-font {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Be Vietnam Pro', sans-serif;
             font-weight: 900;
-            letter-spacing: -0.04em;
+            letter-spacing: -0.02em;
+        }
+        /* Riêng các ký tự chữ cái đơn lẻ (A, B, C...) dùng Be Vietnam Pro đậm nét để dạy bé */
+        .letter-font {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-weight: 900;
         }
         .chunky-shadow { box-shadow: 0 8px 0 rgba(0,0,0,0.08), 0 12px 24px rgba(0,0,0,0.08); }
         .chunky-shadow-sm { box-shadow: 0 4px 0 rgba(0,0,0,0.08), 0 6px 12px rgba(0,0,0,0.08); }
