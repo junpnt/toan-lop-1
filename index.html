@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vườn Ươm Tài Năng 🌱 - Bé Học Giỏi</title>
+    <title>PreSchool - Bé Học Giỏi</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -31,16 +33,28 @@
             --mint: #7ED6B0;
         }
         body {
-            font-family: 'Fredoka', sans-serif;
-            background: 
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 600;
+            background:
                 radial-gradient(circle at 10% 20%, rgba(255, 217, 61, 0.15) 0%, transparent 40%),
                 radial-gradient(circle at 90% 80%, rgba(255, 143, 171, 0.15) 0%, transparent 40%),
                 radial-gradient(circle at 50% 50%, rgba(109, 193, 247, 0.08) 0%, transparent 50%),
                 #FFF9EC;
             min-height: 100vh;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-        .display-font { font-family: 'Baloo 2', sans-serif; font-weight: 800; }
+        .display-font {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        .brand-font {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+        }
         .chunky-shadow { box-shadow: 0 8px 0 rgba(0,0,0,0.08), 0 12px 24px rgba(0,0,0,0.08); }
         .chunky-shadow-sm { box-shadow: 0 4px 0 rgba(0,0,0,0.08), 0 6px 12px rgba(0,0,0,0.08); }
         .btn-3d {
@@ -455,11 +469,16 @@
             return (
                 <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/80 border-b-4 border-yellow-200 shadow-sm">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
-                        <button onClick={onHome} className="flex items-center gap-2 group">
-                            <div className="text-4xl wobble">🌱</div>
+                        <button onClick={onHome} className="flex items-center gap-2.5 group">
+                            <div className="relative">
+                                <div className="w-11 h-11 bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500 rounded-2xl flex items-center justify-center text-2xl chunky-shadow-sm group-hover:scale-110 group-hover:rotate-6 transition-transform">
+                                    <span className="text-white">📚</span>
+                                </div>
+                                <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full border-2 border-white sparkle"></div>
+                            </div>
                             <div className="hidden sm:block text-left">
-                                <div className="display-font text-xl text-pink-500 leading-none">Vườn Ươm</div>
-                                <div className="display-font text-xl text-orange-500 leading-none">Tài Năng</div>
+                                <div className="brand-font text-2xl bg-gradient-to-r from-pink-500 via-rose-500 to-orange-500 bg-clip-text text-transparent leading-none">PreSchool</div>
+                                <div className="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mt-0.5">Bé Học Giỏi</div>
                             </div>
                         </button>
 
@@ -594,7 +613,7 @@
                     {subjects.map(s => (
                         <button key={s.id}
                             onClick={()=>{onChange(s.id); playClick();}}
-                            className={`flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl font-bold whitespace-nowrap transition-all btn-3d ${active === s.id ? `bg-gradient-to-r ${s.color} text-white border-black/20` : 'bg-white text-gray-600 border-gray-200'}`}>
+                            className={`flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl display-font text-sm sm:text-base whitespace-nowrap transition-all btn-3d ${active === s.id ? `bg-gradient-to-r ${s.color} text-white border-black/20 chunky-shadow-sm` : 'bg-white text-gray-600 border-gray-200 hover:text-gray-800'}`}>
                             <span className="text-xl">{s.emoji}</span>
                             <span>{s.name}</span>
                         </button>
@@ -613,9 +632,9 @@
                     <div className="absolute -top-6 -right-6 text-9xl opacity-20 spin-slow">🌟</div>
                     <div className="relative flex flex-col sm:flex-row items-center justify-between gap-6">
                         <div>
-                            <div className="text-sm font-bold text-purple-600 mb-1">XIN CHÀO {profile.name ? profile.name.toUpperCase() : 'BẠN NHỎ'}! 👋</div>
-                            <h2 className="display-font text-3xl sm:text-4xl text-pink-500 leading-tight">Hôm nay học gì nào?</h2>
-                            <p className="text-gray-600 mt-1">Bé đã hoàn thành <b className="text-orange-500">{done}/{total}</b> bài học</p>
+                            <div className="text-[11px] font-bold text-purple-600 mb-2 uppercase tracking-[0.2em]">Xin chào {profile.name || 'bạn nhỏ'}! 👋</div>
+                            <h2 className="display-font text-3xl sm:text-4xl bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent leading-tight">Hôm nay học gì nào?</h2>
+                            <p className="text-gray-600 mt-2 font-semibold">Bé đã hoàn thành <b className="text-orange-500">{done}/{total}</b> bài học</p>
                         </div>
                         <div className="relative">
                             <svg width="120" height="120" viewBox="0 0 120 120" className="transform -rotate-90">
@@ -1949,10 +1968,17 @@
                             ))}
                         </div>
 
-                        <footer className="mt-16 text-center text-gray-400 text-sm pb-8">
-                            <div className="text-4xl mb-2">🌱🌸🌷🌻</div>
-                            <p className="display-font text-base text-pink-400">Vườn Ươm Tài Năng</p>
-                            <p className="text-xs mt-1">Chương trình học dành cho bé 4-6 tuổi · Phát triển toàn diện</p>
+                        <footer className="mt-20 pb-10 text-center">
+                            <div className="flex items-center justify-center gap-3 mb-4">
+                                <div className="h-px w-12 bg-gradient-to-r from-transparent to-pink-300"></div>
+                                <div className="w-10 h-10 bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500 rounded-xl flex items-center justify-center text-lg chunky-shadow-sm">
+                                    <span className="text-white">📚</span>
+                                </div>
+                                <div className="h-px w-12 bg-gradient-to-l from-transparent to-pink-300"></div>
+                            </div>
+                            <p className="brand-font text-xl bg-gradient-to-r from-pink-500 via-rose-500 to-orange-500 bg-clip-text text-transparent">PreSchool</p>
+                            <p className="text-xs uppercase tracking-[0.25em] text-gray-400 font-bold mt-1">Bé Học Giỏi · Vui Khoẻ Mỗi Ngày</p>
+                            <p className="text-xs text-gray-400 mt-3">Chương trình học dành cho bé 4-6 tuổi · Phát triển toàn diện Tiếng Việt, Toán, Tiếng Anh</p>
                         </footer>
                     </main>
 
