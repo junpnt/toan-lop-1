@@ -3,492 +3,1968 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bé Học Toán - Luyện Toán Lớp 1</title>
+    <title>Vườn Ươm Tài Năng 🌱 - Bé Học Giỏi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
-        *{box-sizing:border-box;margin:0;padding:0;}
-        body{
-            background:#FFF9E6;
-            font-family:'Segoe UI',Tahoma,Arial,sans-serif;
-            min-height:100vh;
-            display:flex;flex-direction:column;
-            align-items:center;justify-content:center;
-            padding:16px;overflow-x:hidden;
+        :root {
+            --cream: #FFF9EC;
+            --peach: #FFE4C4;
+            --pink: #FF8FAB;
+            --pink-dark: #E85D75;
+            --yellow: #FFD93D;
+            --yellow-dark: #F4B400;
+            --blue: #6DC1F7;
+            --blue-dark: #3498DB;
+            --green: #95E1A4;
+            --green-dark: #4CAF50;
+            --purple: #C3A6FF;
+            --purple-dark: #8B5CF6;
+            --orange: #FFAA5A;
+            --orange-dark: #FF7A45;
+            --coral: #FF6B9D;
+            --mint: #7ED6B0;
         }
-        .star-bg{position:fixed;pointer-events:none;opacity:.15;z-index:0;font-size:80px;line-height:1;}
-        .card{
-            width:100%;max-width:440px;background:#fff;
-            border-radius:40px;
-            box-shadow:0 20px 0 0 #E6E6E6;
-            padding:32px;border:4px solid #FFD700;
-            position:relative;z-index:10;
-            animation:slideUp .3s ease;
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 217, 61, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 143, 171, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(109, 193, 247, 0.08) 0%, transparent 50%),
+                #FFF9EC;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-        @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-        @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
-        @keyframes popIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+        .display-font { font-family: 'Baloo 2', sans-serif; font-weight: 800; }
+        .chunky-shadow { box-shadow: 0 8px 0 rgba(0,0,0,0.08), 0 12px 24px rgba(0,0,0,0.08); }
+        .chunky-shadow-sm { box-shadow: 0 4px 0 rgba(0,0,0,0.08), 0 6px 12px rgba(0,0,0,0.08); }
+        .btn-3d {
+            border-bottom-width: 6px;
+            transition: all 0.12s ease;
+        }
+        .btn-3d:active {
+            transform: translateY(4px);
+            border-bottom-width: 2px;
+        }
 
-        /* Buttons */
-        .btn{
-            width:100%;padding:20px;border:none;border-radius:20px;
-            font-size:20px;font-weight:700;cursor:pointer;
-            transition:transform .1s,box-shadow .1s;font-family:inherit;
+        /* Animations */
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-8px, 0) rotate(-2deg); }
+            75% { transform: translate(8px, 0) rotate(2deg); }
         }
-        .btn:active{transform:translateY(4px);}
-        .btn-teal{background:#4ECDC4;color:#fff;box-shadow:0 6px 0 0 #36918A;}
-        .btn-teal:active{box-shadow:0 2px 0 0 #36918A;}
-        .btn-red{background:#FF6B6B;color:#fff;box-shadow:0 6px 0 0 #D64545;}
-        .btn-red:active{box-shadow:0 2px 0 0 #D64545;}
-        .btn-gray{background:#D1D5DB;color:#fff;box-shadow:0 6px 0 0 #9CA3AF;cursor:not-allowed;}
-        .btn-option{
-            background:#fff;color:#374151;border:4px solid #F3F4F6;
-            border-radius:16px;padding:16px;font-size:18px;font-weight:700;
-            cursor:pointer;transition:border-color .15s,background .15s;
-            font-family:inherit;width:100%;
-        }
-        .btn-option:hover{border-color:#4ECDC4;}
+        .shake { animation: shake 0.35s ease-in-out; }
 
-        /* Input */
-        .input-text{
-            width:100%;padding:16px 24px;background:#F9FAFB;
-            border:4px solid #E5E7EB;border-radius:20px;
-            font-size:20px;font-weight:700;font-family:inherit;
-            outline:none;transition:border-color .2s;
+        @keyframes pop {
+            0% { transform: scale(0.7); opacity: 0; }
+            60% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
         }
-        .input-text:focus{border-color:#4ECDC4;}
-        .input-number{
-            width:100%;padding:20px;text-align:center;
-            font-size:48px;font-weight:700;background:#F9FAFB;
-            border:4px solid #E5E7EB;border-radius:24px;
-            font-family:inherit;outline:none;
-            -moz-appearance:textfield;
-        }
-        .input-number:focus{border-color:#4ECDC4;}
-        .input-number::-webkit-inner-spin-button,
-        .input-number::-webkit-outer-spin-button{-webkit-appearance:none;}
+        .pop { animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
-        /* Avatar grid */
-        .avatar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-        .avatar-btn{
-            padding:12px;border-radius:16px;border:4px solid transparent;
-            background:#F9FAFB;cursor:pointer;
-            display:flex;flex-direction:column;align-items:center;gap:4px;
-            transition:border-color .15s,background .15s;font-family:inherit;
+        @keyframes wobble {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
         }
-        .avatar-btn.active{border-color:#4ECDC4;background:#E0F7F5;}
-        .avatar-emoji{font-size:36px;}
-        .avatar-label{font-size:11px;font-weight:700;color:#6B7280;}
+        .wobble { animation: wobble 2s ease-in-out infinite; }
 
-        /* Question */
-        .question-box{
-            text-align:center;padding:36px 20px;background:#F8F9FA;
-            border-radius:32px;border:4px dashed #E5E7EB;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
-        .question-text{
-            font-size:62px;font-weight:900;color:#1F2937;
-            display:flex;align-items:center;justify-content:center;gap:14px;
+        .float { animation: float 3s ease-in-out infinite; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .q-op{color:#FF6B6B;}
-        .q-qm{color:#D1D5DB;}
+        .slide-up { animation: slideUp 0.5s ease-out backwards; }
 
-        /* Comparison */
-        .cmp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-        .cmp-btn{
-            padding:20px;background:#fff;border:4px solid #E5E7EB;
-            border-radius:16px;font-size:36px;font-weight:700;color:#374151;
-            cursor:pointer;transition:border-color .15s;font-family:inherit;
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
-        .cmp-btn:hover{border-color:#4ECDC4;}
+        .spin-slow { animation: spin-slow 12s linear infinite; }
 
-        /* Stats */
-        .stats-bar{display:flex;justify-content:space-between;align-items:center;}
-        .player-badge{display:flex;align-items:center;gap:8px;}
-        .avatar-circle{
-            width:40px;height:40px;border-radius:50%;
-            display:flex;align-items:center;justify-content:center;
-            font-size:20px;border:2px solid #fff;background:#FEF3C7;
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
         }
-        .player-name{font-weight:700;color:#374151;font-size:15px;}
-        .stat-pills{display:flex;gap:8px;}
-        .pill{
-            display:flex;align-items:center;gap:4px;
-            padding:4px 10px;border-radius:12px;
-            font-weight:700;font-size:14px;border:2px solid;
+        .sparkle { animation: sparkle 2s ease-in-out infinite; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: var(--cream); }
+        ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 10px; border: 3px solid var(--cream); }
+
+        /* Dotted background */
+        .dot-bg {
+            background-image: radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px);
+            background-size: 24px 24px;
         }
-        .pill-lives{background:#FFF1F2;border-color:#FECDD3;color:#E11D48;}
-        .pill-score{background:#FEFCE8;border-color:#FEF08A;color:#CA8A04;}
 
-        /* Timer bar */
-        .timer-wrap{height:8px;background:#E5E7EB;border-radius:99px;overflow:hidden;}
-        .timer-bar{height:100%;background:#4ECDC4;border-radius:99px;transition:width .9s linear,background .3s;}
-        .timer-bar.warn{background:#FF6B6B;}
-
-        /* Feedback */
-        .feedback-overlay{
-            position:absolute;inset:0;
-            display:flex;align-items:center;justify-content:center;
-            background:rgba(255,255,255,.93);border-radius:36px;
-            z-index:20;animation:popIn .2s ease;
+        /* Cloud decoration */
+        .cloud {
+            position: absolute;
+            opacity: 0.6;
+            pointer-events: none;
         }
-        .feedback-content{text-align:center;}
-        .feedback-icon{font-size:80px;}
-        .feedback-text{font-size:26px;font-weight:700;margin-top:8px;}
-        .fc-correct{color:#4ECDC4;}
-        .fc-wrong{color:#FF6B6B;}
 
-        /* Spacing */
-        .sy>*+*{margin-top:16px;}
-        .sy-sm>*+*{margin-top:12px;}
-        .tc{text-align:center;}
-        .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-        .footer-text{margin-top:24px;color:#9CA3AF;font-weight:500;font-size:14px;z-index:10;}
+        /* Progress bar */
+        .progress-bar {
+            background: linear-gradient(90deg, #FFD93D, #FF8FAB);
+            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
 
-        #confetti-canvas{position:fixed;top:0;left:0;pointer-events:none;z-index:100;}
+        /* Card hover */
+        .lesson-card {
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s;
+        }
+        .lesson-card:hover {
+            transform: translateY(-6px) rotate(-0.5deg);
+        }
+
+        /* Badge lock */
+        .locked { filter: grayscale(1) brightness(0.7); opacity: 0.5; }
+
+        /* Custom checkbox bounce */
+        .bounce-in { animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
     </style>
 </head>
 <body>
-<canvas id="confetti-canvas"></canvas>
-<span class="star-bg" style="top:10px;left:10px;">⭐</span>
-<span class="star-bg" style="bottom:10px;right:10px;font-size:64px;">⭐</span>
+    <div id="root"></div>
 
-<div class="card" id="app"></div>
-<p class="footer-text">Học toán thật vui cùng Bé Học Toán!</p>
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo } = React;
 
-<script>
-// ── Constants ────────────────────────────────────────────────────────
-const AVATARS=[
-    {id:'dog',   emoji:'🐶',label:'Cún con'},
-    {id:'cat',   emoji:'🐱',label:'Mèo nhỏ'},
-    {id:'rabbit',emoji:'🐰',label:'Thỏ trắng'},
-    {id:'panda', emoji:'🐼',label:'Gấu trúc'},
-    {id:'lion',  emoji:'🦁',label:'Sư tử'},
-    {id:'frog',  emoji:'🐸',label:'Ếch xanh'},
-];
+        // ============================================================
+        // DỮ LIỆU HỌC TẬP
+        // ============================================================
+        const ALPHABET_VN = ['A','Ă','Â','B','C','D','Đ','E','Ê','G','H','I','K','L','M','N','O','Ô','Ơ','P','Q','R','S','T','U','Ư','V','X','Y'];
+        const ALPHABET_EN = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
-// ── State ────────────────────────────────────────────────────────────
-const S={
-    screen:'start',
-    name:'', avatar:AVATARS[0],
-    question:null,
-    quizQs:[], quizIdx:0,
-    score:0, lives:3, timeLeft:30,
-    feedback:null,          // null | 'correct' | 'wrong'
-    mode:'endless',         // 'endless' | 'quiz'
-    timer:null,
-    opts:[],                // current question options (safe reference for onclick)
-};
+        // Cách đọc (phiên âm) từng chữ cái tiếng Việt - dùng âm tiếng Việt có sẵn để trình duyệt tiếng Anh cũng đọc tương đối đúng
+        // Cặp: [tên chữ - cách đọc, âm - cách phát âm]
+        const VN_LETTER_PRONOUNCE = {
+            'A':  { name:'a',   sound:'a'   },
+            'Ă':  { name:'á',   sound:'á'   },
+            'Â':  { name:'ớ',   sound:'ớ'   },
+            'B':  { name:'bê',  sound:'bờ'  },
+            'C':  { name:'xê',  sound:'cờ'  },
+            'D':  { name:'dê',  sound:'dờ'  },
+            'Đ':  { name:'đê',  sound:'đờ'  },
+            'E':  { name:'e',   sound:'e'   },
+            'Ê':  { name:'ê',   sound:'ê'   },
+            'G':  { name:'giê', sound:'gờ'  },
+            'H':  { name:'hát', sound:'hờ'  },
+            'I':  { name:'i',   sound:'i'   },
+            'K':  { name:'ca',  sound:'cờ'  },
+            'L':  { name:'e lờ',sound:'lờ'  },
+            'M':  { name:'em mờ',sound:'mờ' },
+            'N':  { name:'en nờ',sound:'nờ' },
+            'O':  { name:'o',   sound:'o'   },
+            'Ô':  { name:'ô',   sound:'ô'   },
+            'Ơ':  { name:'ơ',   sound:'ơ'   },
+            'P':  { name:'pê',  sound:'pờ'  },
+            'Q':  { name:'cu',  sound:'quờ' },
+            'R':  { name:'e rờ',sound:'rờ'  },
+            'S':  { name:'ét xì',sound:'sờ' },
+            'T':  { name:'tê',  sound:'tờ'  },
+            'U':  { name:'u',   sound:'u'   },
+            'Ư':  { name:'ư',   sound:'ư'   },
+            'V':  { name:'vê',  sound:'vờ'  },
+            'X':  { name:'ích xì',sound:'xờ'},
+            'Y':  { name:'i dài',sound:'i'  },
+        };
 
-// ── Confetti ─────────────────────────────────────────────────────────
-function confetti(big){
-    const cv=document.getElementById('confetti-canvas');
-    const cx=cv.getContext('2d');
-    cv.width=innerWidth; cv.height=innerHeight;
-    const n=big?160:60;
-    const cols=['#FF6B6B','#4ECDC4','#FFD700','#A8E063','#FF8C94','#7C6FFF'];
-    const ps=Array.from({length:n},()=>({
-        x:cv.width*.5+(Math.random()-.5)*200,
-        y:cv.height*(big?.6:.75),
-        vx:(Math.random()-.5)*(big?18:10),
-        vy:-(Math.random()*(big?14:8)+3),
-        c:cols[Math.random()*cols.length|0],
-        s:Math.random()*8+4,
-        a:1, r:Math.random()*360
-    }));
-    let raf;
-    (function draw(){
-        cx.clearRect(0,0,cv.width,cv.height);
-        let alive=false;
-        ps.forEach(p=>{
-            p.x+=p.vx;p.y+=p.vy;p.vy+=.35;p.a-=.014;p.r+=4;
-            if(p.a<=0)return; alive=true;
-            cx.save();cx.globalAlpha=p.a;cx.fillStyle=p.c;
-            cx.translate(p.x,p.y);cx.rotate(p.r*Math.PI/180);
-            cx.fillRect(-p.s/2,-p.s/2,p.s,p.s);cx.restore();
-        });
-        if(alive)raf=requestAnimationFrame(draw);
-        else cx.clearRect(0,0,cv.width,cv.height);
-    })();
-}
+        // Hình ảnh minh họa cho chữ cái - mỗi chữ ghép với một từ tiếng Việt thật sự bắt đầu bằng chữ đó
+        const ALPHABET_IMAGES = {
+            'A':  {emoji:'🐜',  word:'Con Kiến'},    // con kiến (A là nguyên âm, minh họa bằng "A" trong "ăn"/"an")
+            'Ă':  {emoji:'🍚',  word:'Ăn Cơm'},
+            'Â':  {emoji:'☕',  word:'Ấm Trà'},
+            'B':  {emoji:'🦋',  word:'Con Bướm'},
+            'C':  {emoji:'🐟',  word:'Con Cá'},
+            'D':  {emoji:'🍉',  word:'Dưa Hấu'},
+            'Đ':  {emoji:'🏮',  word:'Cái Đèn'},
+            'E':  {emoji:'👶',  word:'Em Bé'},
+            'Ê':  {emoji:'🐸',  word:'Con Ếch'},
+            'G':  {emoji:'🐓',  word:'Con Gà'},
+            'H':  {emoji:'🌹',  word:'Bông Hoa'},
+            'I':  {emoji:'🤫',  word:'Im Lặng'},
+            'K':  {emoji:'🍬',  word:'Cái Kẹo'},
+            'L':  {emoji:'🍃',  word:'Chiếc Lá'},
+            'M':  {emoji:'🐱',  word:'Con Mèo'},
+            'N':  {emoji:'🍄',  word:'Cây Nấm'},
+            'O':  {emoji:'🐝',  word:'Con Ong'},
+            'Ô':  {emoji:'☂️',  word:'Cái Ô'},
+            'Ơ':  {emoji:'🌶️', word:'Quả Ớt'},
+            'P':  {emoji:'🎆',  word:'Pháo Hoa'},
+            'Q':  {emoji:'🍎',  word:'Quả Táo'},
+            'R':  {emoji:'🐢',  word:'Con Rùa'},
+            'S':  {emoji:'🦁',  word:'Sư Tử'},
+            'T':  {emoji:'🐯',  word:'Con Thỏ'},
+            'U':  {emoji:'🦄',  word:'Uống Nước'},
+            'Ư':  {emoji:'👑',  word:'Ước Mơ'},
+            'V':  {emoji:'🦆',  word:'Con Vịt'},
+            'X':  {emoji:'🚲',  word:'Xe Đạp'},
+            'Y':  {emoji:'🩺',  word:'Y Tá'},
+        };
 
-// ── Question generator ───────────────────────────────────────────────
-function genQ(){
-    if(Math.random()>.7){
-        const a=Math.floor(Math.random()*100);
-        const b=Math.floor(Math.random()*100);
-        const ans=a>b?'>':a<b?'<':'=';
-        return{type:'cmp',a,b,operator:'?',answer:ans,options:['>','<','=']};
-    }
-    const op=Math.random()>.5?'+':'-';
-    let a,b,ans;
-    if(op==='+'){a=Math.floor(Math.random()*90)+1;b=Math.floor(Math.random()*(100-a))+1;ans=a+b;}
-    else{a=Math.floor(Math.random()*99)+2;b=Math.floor(Math.random()*(a-1))+1;ans=a-b;}
-    const opts=[ans];
-    while(opts.length<4){const w=ans+Math.floor(Math.random()*10)-5;if(w>=0&&w<=100&&!opts.includes(w))opts.push(w);}
-    opts.sort(()=>Math.random()-.5);
-    return{type:'calc',a,b,operator:op,answer:ans,options:opts};
-}
+        // Từ vựng tiếng Anh - Chủ đề
+        const ENGLISH_TOPICS = [
+            {
+                id: 'animals',
+                name: 'Động Vật',
+                emoji: '🦁',
+                color: 'bg-orange-300',
+                words: [
+                    {en:'Cat', vi:'Con mèo', emoji:'🐱'},
+                    {en:'Dog', vi:'Con chó', emoji:'🐶'},
+                    {en:'Bird', vi:'Con chim', emoji:'🐦'},
+                    {en:'Fish', vi:'Con cá', emoji:'🐟'},
+                    {en:'Cow', vi:'Con bò', emoji:'🐄'},
+                    {en:'Pig', vi:'Con lợn', emoji:'🐷'},
+                    {en:'Duck', vi:'Con vịt', emoji:'🦆'},
+                    {en:'Lion', vi:'Sư tử', emoji:'🦁'},
+                ]
+            },
+            {
+                id: 'colors',
+                name: 'Màu Sắc',
+                emoji: '🌈',
+                color: 'bg-pink-300',
+                words: [
+                    {en:'Red', vi:'Màu đỏ', emoji:'🔴'},
+                    {en:'Blue', vi:'Màu xanh dương', emoji:'🔵'},
+                    {en:'Yellow', vi:'Màu vàng', emoji:'🟡'},
+                    {en:'Green', vi:'Màu xanh lá', emoji:'🟢'},
+                    {en:'Pink', vi:'Màu hồng', emoji:'💗'},
+                    {en:'Purple', vi:'Màu tím', emoji:'🟣'},
+                    {en:'Orange', vi:'Màu cam', emoji:'🟠'},
+                    {en:'Black', vi:'Màu đen', emoji:'⚫'},
+                ]
+            },
+            {
+                id: 'fruits',
+                name: 'Trái Cây',
+                emoji: '🍎',
+                color: 'bg-red-300',
+                words: [
+                    {en:'Apple', vi:'Quả táo', emoji:'🍎'},
+                    {en:'Banana', vi:'Quả chuối', emoji:'🍌'},
+                    {en:'Orange', vi:'Quả cam', emoji:'🍊'},
+                    {en:'Grape', vi:'Quả nho', emoji:'🍇'},
+                    {en:'Mango', vi:'Quả xoài', emoji:'🥭'},
+                    {en:'Watermelon', vi:'Dưa hấu', emoji:'🍉'},
+                    {en:'Strawberry', vi:'Dâu tây', emoji:'🍓'},
+                    {en:'Pineapple', vi:'Dứa', emoji:'🍍'},
+                ]
+            },
+            {
+                id: 'numbers',
+                name: 'Số Đếm',
+                emoji: '🔢',
+                color: 'bg-blue-300',
+                words: [
+                    {en:'One', vi:'Số một', emoji:'1️⃣'},
+                    {en:'Two', vi:'Số hai', emoji:'2️⃣'},
+                    {en:'Three', vi:'Số ba', emoji:'3️⃣'},
+                    {en:'Four', vi:'Số bốn', emoji:'4️⃣'},
+                    {en:'Five', vi:'Số năm', emoji:'5️⃣'},
+                    {en:'Six', vi:'Số sáu', emoji:'6️⃣'},
+                    {en:'Seven', vi:'Số bảy', emoji:'7️⃣'},
+                    {en:'Eight', vi:'Số tám', emoji:'8️⃣'},
+                ]
+            },
+        ];
 
-// ── Timer ────────────────────────────────────────────────────────────
-function stopTimer(){clearInterval(S.timer);S.timer=null;}
-function startTimer(onExpire){
-    stopTimer();S.timeLeft=30;
-    S.timer=setInterval(()=>{
-        S.timeLeft--;
-        updateTimerBar();
-        if(S.timeLeft<=0){stopTimer();onExpire();}
-    },1000);
-}
-function updateTimerBar(){
-    const b=document.getElementById('tbar');
-    const l=document.getElementById('tlbl');
-    if(b){b.style.width=(S.timeLeft/30*100)+'%';b.className='timer-bar'+(S.timeLeft<=10?' warn':'');}
-    if(l)l.textContent='⏳ '+S.timeLeft+'s';
-}
+        // Các chủ đề đếm (emoji)
+        const COUNTING_ITEMS = ['🍎','🎈','⭐','🌸','🦋','🐥','🍓','🐠','🚗','🎁'];
 
-// ── Game logic ───────────────────────────────────────────────────────
-function gameOver(){
-    stopTimer();
-    S.screen=S.mode==='endless'?'gameover':'quiz-result';
-    render();
-    if(S.screen==='quiz-result')confetti(true);
-}
+        // ============================================================
+        // BÀI HỌC
+        // ============================================================
+        const LESSONS = [
+            // Tiếng Việt
+            { id:'vn-alphabet-1', subject:'vietnamese', title:'Bảng Chữ Cái (1)', desc:'A, Ă, Â, B, C, D, Đ', icon:'🔤', color:'from-pink-400 to-pink-500', bg:'bg-pink-100', range:[0,7], type:'alphabet-vn' },
+            { id:'vn-alphabet-2', subject:'vietnamese', title:'Bảng Chữ Cái (2)', desc:'E, Ê, G, H, I, K, L', icon:'📚', color:'from-rose-400 to-pink-500', bg:'bg-rose-100', range:[7,14], type:'alphabet-vn' },
+            { id:'vn-alphabet-3', subject:'vietnamese', title:'Bảng Chữ Cái (3)', desc:'M, N, O, Ô, Ơ, P, Q', icon:'✏️', color:'from-fuchsia-400 to-pink-500', bg:'bg-fuchsia-100', range:[14,21], type:'alphabet-vn' },
+            { id:'vn-alphabet-4', subject:'vietnamese', title:'Bảng Chữ Cái (4)', desc:'R, S, T, U, Ư, V, X, Y', icon:'🎨', color:'from-purple-400 to-pink-500', bg:'bg-purple-100', range:[21,29], type:'alphabet-vn' },
+            { id:'vn-word-match', subject:'vietnamese', title:'Ghép Chữ Với Hình', desc:'Nhận biết chữ cái qua hình ảnh', icon:'🧩', color:'from-pink-500 to-rose-500', bg:'bg-rose-100', type:'word-match' },
 
-function nextEndlessQ(){
-    S.question=genQ(); S.feedback=null; S.opts=S.question.options;
-    startTimer(()=>{
-        S.lives--;
-        if(S.lives<=0){gameOver();return;}
-        nextEndlessQ(); render();
-    });
-    render();
-}
+            // Toán
+            { id:'math-count-1', subject:'math', title:'Tập Đếm Đến 5', desc:'Đếm đồ vật từ 1 đến 5', icon:'🔢', color:'from-blue-400 to-cyan-500', bg:'bg-blue-100', max:5, type:'counting' },
+            { id:'math-count-2', subject:'math', title:'Tập Đếm Đến 10', desc:'Đếm đồ vật từ 1 đến 10', icon:'🧮', color:'from-cyan-400 to-blue-500', bg:'bg-cyan-100', max:10, type:'counting' },
+            { id:'math-add', subject:'math', title:'Phép Cộng Đơn Giản', desc:'Cộng trong phạm vi 10', icon:'➕', color:'from-green-400 to-emerald-500', bg:'bg-green-100', type:'addition' },
+            { id:'math-sub', subject:'math', title:'Phép Trừ Đơn Giản', desc:'Trừ trong phạm vi 10', icon:'➖', color:'from-emerald-400 to-teal-500', bg:'bg-emerald-100', type:'subtraction' },
+            { id:'math-compare', subject:'math', title:'So Sánh Lớn Hơn, Nhỏ Hơn', desc:'Bé học dấu >, <, =', icon:'⚖️', color:'from-teal-400 to-cyan-500', bg:'bg-teal-100', type:'compare' },
+            { id:'math-shape', subject:'math', title:'Nhận Biết Hình Khối', desc:'Hình tròn, vuông, tam giác', icon:'🔺', color:'from-indigo-400 to-blue-500', bg:'bg-indigo-100', type:'shapes' },
 
-function startEndless(){
-    S.mode='endless';S.score=0;S.lives=3;S.screen='playing';
-    nextEndlessQ();
-}
+            // Tiếng Anh
+            { id:'en-alphabet', subject:'english', title:'English Alphabet', desc:'A B C D E F G...', icon:'🔠', color:'from-yellow-400 to-orange-500', bg:'bg-yellow-100', type:'alphabet-en' },
+            { id:'en-animals', subject:'english', title:'Animals - Động Vật', desc:'Học từ về con vật', icon:'🦁', color:'from-orange-400 to-red-500', bg:'bg-orange-100', topic:'animals', type:'vocab' },
+            { id:'en-colors', subject:'english', title:'Colors - Màu Sắc', desc:'Học các màu cơ bản', icon:'🌈', color:'from-pink-400 to-purple-500', bg:'bg-pink-100', topic:'colors', type:'vocab' },
+            { id:'en-fruits', subject:'english', title:'Fruits - Trái Cây', desc:'Gọi tên trái cây', icon:'🍎', color:'from-red-400 to-rose-500', bg:'bg-red-100', topic:'fruits', type:'vocab' },
+            { id:'en-numbers', subject:'english', title:'Numbers - Số Đếm', desc:'One, two, three...', icon:'1️⃣', color:'from-amber-400 to-yellow-500', bg:'bg-amber-100', topic:'numbers', type:'vocab' },
 
-function startQuiz(){
-    S.mode='quiz';S.quizQs=Array.from({length:10},genQ);
-    S.quizIdx=0;S.score=0;S.screen='quiz';
-    nextQuizQ();
-}
-function nextQuizQ(){
-    S.feedback=null; S.opts=S.quizQs[S.quizIdx].options;
-    startTimer(()=>advanceQuiz());
-    render();
-}
-function advanceQuiz(){S.quizIdx<9?(S.quizIdx++,nextQuizQ()):gameOver();}
+            // Trò chơi ghi nhớ (Memory Match)
+            { id:'mem-animals', subject:'memory', title:'Ghi Nhớ: Động Vật', desc:'Tìm cặp thẻ động vật giống nhau', icon:'🧠', color:'from-violet-400 to-purple-500', bg:'bg-violet-100', deck:'animals', type:'memory' },
+            { id:'mem-fruits', subject:'memory', title:'Ghi Nhớ: Trái Cây', desc:'Tìm cặp thẻ trái cây giống nhau', icon:'🍓', color:'from-fuchsia-400 to-pink-500', bg:'bg-fuchsia-100', deck:'fruits', type:'memory' },
+            { id:'mem-words', subject:'memory', title:'Ghi Nhớ: Hình & Từ', desc:'Ghép con vật với tên gọi', icon:'🎴', color:'from-purple-400 to-indigo-500', bg:'bg-purple-100', deck:'words', type:'memory' },
+        ];
 
-// Called from inline onclick
-function checkAns(val){
-    if(S.feedback)return;
-    const q=S.question; if(!q)return;
-    stopTimer();
-    const ok=val.toString()===q.answer.toString();
-    S.feedback=ok?'correct':'wrong';
-    if(ok){S.score++;confetti(true);}else{S.lives--;}
-    render();
-    setTimeout(()=>{
-        if(ok||S.lives>0)nextEndlessQ(); else gameOver();
-    },1000);
-}
-function checkEndlessTyped(){
-    const v=document.getElementById('ans').value.trim();
-    if(v)checkAns(v);
-}
-function checkQuizAns(i){
-    if(S.feedback)return;
-    stopTimer();
-    const q=S.quizQs[S.quizIdx];
-    const ok=S.opts[i].toString()===q.answer.toString();
-    S.feedback=ok?'correct':'wrong';
-    if(ok){S.score++;confetti(false);}
-    render();
-    setTimeout(advanceQuiz,800);
-}
+        // Huy hiệu
+        const BADGES = [
+            { id:'first-star', name:'Ngôi Sao Đầu Tiên', icon:'⭐', desc:'Hoàn thành bài học đầu tiên', req: (s)=>s.stars >= 5 },
+            { id:'star-10', name:'Nhà Sưu Tầm Sao', icon:'🌟', desc:'Đạt 50 ngôi sao', req: (s)=>s.stars >= 50 },
+            { id:'star-100', name:'Siêu Sao', icon:'💫', desc:'Đạt 100 ngôi sao', req: (s)=>s.stars >= 100 },
+            { id:'vn-master', name:'Chuyên Gia Tiếng Việt', icon:'📚', desc:'Hoàn thành 4 bài Tiếng Việt', req: (s)=>LESSONS.filter(l=>l.subject==='vietnamese' && s.completed.includes(l.id)).length >= 4 },
+            { id:'math-master', name:'Nhà Toán Học Nhỏ', icon:'🧮', desc:'Hoàn thành 4 bài Toán', req: (s)=>LESSONS.filter(l=>l.subject==='math' && s.completed.includes(l.id)).length >= 4 },
+            { id:'en-master', name:'English Star', icon:'🌍', desc:'Hoàn thành 3 bài Tiếng Anh', req: (s)=>LESSONS.filter(l=>l.subject==='english' && s.completed.includes(l.id)).length >= 3 },
+            { id:'streak-5', name:'Chăm Chỉ', icon:'🔥', desc:'Trả lời đúng 5 câu liên tiếp', req: (s)=>s.bestStreak >= 5 },
+            { id:'all-lessons', name:'Thiên Tài Nhí', icon:'👑', desc:'Hoàn thành tất cả bài học', req: (s)=>s.completed.length >= LESSONS.length },
+        ];
 
-// ── Helpers ───────────────────────────────────────────────────────────
-const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        // ============================================================
+        // HELPERS
+        // ============================================================
+        const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+        const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-function feedbackHTML(){
-    if(!S.feedback)return'';
-    const ok=S.feedback==='correct';
-    return`<div class="feedback-overlay">
-        <div class="feedback-content ${ok?'fc-correct':'fc-wrong'}">
-            <div class="feedback-icon">${ok?'✅':'❌'}</div>
-            <div class="feedback-text">${ok?'ĐÚNG RỒI! 🎉':'THỬ LẠI NHÉ! 💪'}</div>
-        </div></div>`;
-}
+        const playSuccess = () => {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                [523.25, 659.25, 783.99].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.frequency.value = freq;
+                    osc.type = 'sine';
+                    gain.gain.setValueAtTime(0, ctx.currentTime + i * 0.1);
+                    gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + i * 0.1 + 0.02);
+                    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + i * 0.1 + 0.2);
+                    osc.start(ctx.currentTime + i * 0.1);
+                    osc.stop(ctx.currentTime + i * 0.1 + 0.2);
+                });
+            } catch(e){}
+        };
+        const playError = () => {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.frequency.setValueAtTime(200, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.2);
+                osc.type = 'sawtooth';
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.2);
+            } catch(e){}
+        };
+        const playClick = () => {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.frequency.value = 800;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+                osc.start(); osc.stop(ctx.currentTime + 0.05);
+            } catch(e){}
+        };
 
-// ── Render ────────────────────────────────────────────────────────────
-function render(){
-    const app=document.getElementById('app');
+        const speak = (text, lang='vi-VN') => {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = lang;
+            msg.rate = lang === 'en-US' ? 0.85 : 0.75;
+            msg.pitch = 1.15;
+            msg.volume = 1;
+            const voices = window.speechSynthesis.getVoices();
 
-    // ── Start ──
-    if(S.screen==='start'){
-        app.innerHTML=`<div class="sy tc">
-            <h1 style="font-size:44px;font-weight:900;color:#FF6B6B;">Bé Học Toán! 🎨</h1>
-            <div style="font-size:80px;animation:bounce 1s infinite;">🦁</div>
-            <p style="font-size:18px;color:#6B7280;font-weight:600;">Luyện tập cộng trừ trong phạm vi 100!</p>
-            <button class="btn btn-teal" style="font-size:28px;padding:24px;"
-                onclick="S.screen='setup';render()">BẮT ĐẦU</button>
-        </div>`;
-        return;
-    }
+            if (lang === 'vi-VN') {
+                // Ưu tiên giọng tiếng Việt xịn
+                const viVoice = voices.find(v => v.lang === 'vi-VN' || v.lang === 'vi_VN')
+                    || voices.find(v => v.lang.toLowerCase().startsWith('vi'));
+                if (viVoice) {
+                    msg.voice = viVoice;
+                } else {
+                    // Không có giọng tiếng Việt → không ép dùng giọng tiếng Anh (vì đọc sai bét)
+                    // Để trình duyệt tự chọn, hoặc tìm giọng đa ngôn ngữ
+                    const multiVoice = voices.find(v => v.name.toLowerCase().includes('google'))
+                        || voices.find(v => v.default);
+                    if (multiVoice) msg.voice = multiVoice;
+                }
+            } else {
+                const enVoice = voices.find(v => v.lang === 'en-US')
+                    || voices.find(v => v.lang.toLowerCase().startsWith('en'));
+                if (enVoice) msg.voice = enVoice;
+            }
+            window.speechSynthesis.speak(msg);
+        };
 
-    // ── Setup ──
-    if(S.screen==='setup'){
-        app.innerHTML=`<div class="sy">
-            <div class="tc">
-                <h2 style="font-size:28px;font-weight:900;color:#FF6B6B;">Chào bé yêu! 👋</h2>
-                <p style="color:#9CA3AF;margin-top:6px;">Nhập tên và chọn bạn đồng hành nhé</p>
-            </div>
-            <input class="input-text" id="nminput" type="text" placeholder="Tên của bé..."
-                value="${esc(S.name)}"
-                oninput="S.name=this.value;_refreshBtns()">
-            <div class="avatar-grid">
-                ${AVATARS.map(a=>`<button class="avatar-btn${a.id===S.avatar.id?' active':''}"
-                    onclick="S.avatar=AVATARS.find(x=>x.id==='${a.id}');
-                             document.querySelectorAll('.avatar-btn').forEach(b=>b.classList.remove('active'));
-                             this.classList.add('active')">
-                    <span class="avatar-emoji">${a.emoji}</span>
-                    <span class="avatar-label">${esc(a.label)}</span>
-                </button>`).join('')}
-            </div>
-            <div class="g2">
-                <button id="btnE" class="btn ${S.name.trim()?'btn-teal':'btn-gray'}"
-                    onclick="if(S.name.trim())startEndless()" style="font-size:18px;">VÔ TẬN ♾️</button>
-                <button id="btnQ" class="btn ${S.name.trim()?'btn-red':'btn-gray'}"
-                    onclick="if(S.name.trim())startQuiz()" style="font-size:18px;">LÀM ĐỀ 📝</button>
-            </div>
-        </div>`;
-        document.getElementById('nminput').focus();
-        return;
-    }
+        // Đọc chữ cái tiếng Việt - chỉ đọc âm thuần tiếng Việt
+        // Ví dụ: B → "bờ", C → "cờ", A → "a"
+        const speakVnLetter = (letter) => {
+            const p = VN_LETTER_PRONOUNCE[letter];
+            if (!p) { speak(letter); return; }
+            speak(p.sound);
+        };
 
-    // ── Playing (endless) ──
-    if(S.screen==='playing'&&S.question){
-        const q=S.question;
-        const timerPct=S.timeLeft/30*100;
-        const ansArea=q.type==='cmp'
-            ?`<div class="cmp-grid">
-                ${['>','<','='].map((op,i)=>`<button class="cmp-btn"
-                    onclick="checkAns('${op==='<'?'&lt;':op==='>'?'&gt;':op}')">${op}</button>`).join('')}
-              </div>`
-            :`<div class="sy-sm">
-                <input class="input-number" type="number" id="ans" placeholder="???"
-                    onkeydown="if(event.key==='Enter')checkEndlessTyped()">
-                <button class="btn btn-red" style="font-size:22px;"
-                    onclick="checkEndlessTyped()">KIỂM TRA</button>
-              </div>`;
-        app.innerHTML=`<div class="sy" style="position:relative;">
-            <div class="stats-bar">
-                <div class="player-badge">
-                    <div class="avatar-circle">${S.avatar.emoji}</div>
-                    <span class="player-name">${esc(S.name)}</span>
-                </div>
-                <div class="stat-pills">
-                    <div class="pill pill-lives">❤️ ${S.lives}</div>
-                    <div class="pill pill-score">🏆 ${S.score}</div>
-                </div>
-            </div>
-            <div class="timer-wrap">
-                <div class="timer-bar${S.timeLeft<=10?' warn':''}" id="tbar"
-                    style="width:${timerPct}%"></div>
-            </div>
-            <div class="question-box">
-                <div class="question-text">
-                    <span>${q.a}</span>
-                    <span class="q-op">${esc(q.operator)}</span>
-                    <span>${q.b}</span>
-                    ${q.type==='calc'?'<span class="q-qm">= ?</span>':''}
-                </div>
-            </div>
-            ${ansArea}
-            ${feedbackHTML()}
-        </div>`;
-        if(!S.feedback&&q.type==='calc'){
-            const inp=document.getElementById('ans');
-            if(inp)inp.focus();
+        // Storage
+        const STORAGE_KEY = 'be-hoc-gioi-v2';
+        const loadState = () => {
+            try {
+                const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
+                return data || { name:'', avatar:'🦁', stars:0, completed:[], bestStreak:0, badges:[] };
+            } catch { return { name:'', avatar:'🦁', stars:0, completed:[], bestStreak:0, badges:[] }; }
+        };
+        const saveState = (s) => {
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch(e){}
+        };
+
+        // ============================================================
+        // COMPONENTS
+        // ============================================================
+
+        // Clouds decoration
+        function Clouds() {
+            return (
+                <>
+                    <div className="cloud top-10 left-[5%] text-6xl float">☁️</div>
+                    <div className="cloud top-32 right-[8%] text-5xl float" style={{animationDelay:'1s'}}>☁️</div>
+                    <div className="cloud top-[60%] left-[2%] text-4xl float" style={{animationDelay:'2s'}}>🌤️</div>
+                    <div className="cloud top-[30%] right-[3%] text-5xl sparkle" style={{animationDelay:'0.5s'}}>✨</div>
+                    <div className="cloud top-[70%] right-[6%] text-4xl sparkle" style={{animationDelay:'1.5s'}}>✨</div>
+                </>
+            );
         }
-        return;
-    }
 
-    // ── Quiz ──
-    if(S.screen==='quiz'){
-        const q=S.quizQs[S.quizIdx];
-        const timerPct=S.timeLeft/30*100;
-        const opts=S.opts; // safe reference
-        app.innerHTML=`<div class="sy" style="position:relative;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-                <span style="font-weight:700;color:#3B82F6;font-size:15px;">
-                    Câu ${S.quizIdx+1} / 10 &nbsp;·&nbsp; Đúng: ${S.score}
-                </span>
-                <span id="tlbl" style="font-weight:700;color:#6B7280;">⏳ ${S.timeLeft}s</span>
-            </div>
-            <div class="timer-wrap">
-                <div class="timer-bar${S.timeLeft<=10?' warn':''}" id="tbar"
-                    style="width:${timerPct}%"></div>
-            </div>
-            <div class="question-box">
-                <div class="question-text" style="font-size:52px;">
-                    <span>${q.a}</span>
-                    <span class="q-op">${esc(q.operator)}</span>
-                    <span>${q.b}</span>
-                    ${q.type==='calc'?'<span class="q-qm">= ?</span>':''}
+        // Header
+        function Header({ profile, onProfileClick, onBadgesClick, onHome }) {
+            return (
+                <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/80 border-b-4 border-yellow-200 shadow-sm">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
+                        <button onClick={onHome} className="flex items-center gap-2 group">
+                            <div className="text-4xl wobble">🌱</div>
+                            <div className="hidden sm:block text-left">
+                                <div className="display-font text-xl text-pink-500 leading-none">Vườn Ươm</div>
+                                <div className="display-font text-xl text-orange-500 leading-none">Tài Năng</div>
+                            </div>
+                        </button>
+
+                        <div className="flex items-center gap-2 sm:gap-3">
+                            <button onClick={onBadgesClick} className="bg-gradient-to-br from-purple-400 to-pink-400 text-white px-3 sm:px-4 py-2 rounded-2xl font-bold chunky-shadow-sm btn-3d border-purple-600 flex items-center gap-1.5">
+                                <span className="text-xl">🏆</span>
+                                <span className="hidden sm:inline">{profile.badges.length}</span>
+                            </button>
+
+                            <div className="bg-gradient-to-br from-yellow-300 to-orange-400 text-white px-4 py-2 rounded-2xl font-bold chunky-shadow-sm flex items-center gap-1.5">
+                                <span className="text-xl">⭐</span>
+                                <span className="display-font text-lg">{profile.stars}</span>
+                            </div>
+
+                            <button onClick={onProfileClick} className="bg-white border-4 border-pink-300 rounded-full w-12 h-12 flex items-center justify-center text-2xl chunky-shadow-sm hover:border-pink-400">
+                                {profile.avatar}
+                            </button>
+                        </div>
+                    </div>
+                </header>
+            );
+        }
+
+        // Profile Setup Modal
+        function ProfileModal({ profile, onSave, onClose }) {
+            const [name, setName] = useState(profile.name);
+            const [avatar, setAvatar] = useState(profile.avatar);
+            const avatars = ['🦁','🐯','🐶','🐱','🐻','🐼','🦊','🐰','🐸','🐵','🦄','🐥','🐧','🦉'];
+
+            return (
+                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 pop">
+                    <div className="bg-white rounded-[40px] max-w-md w-full p-8 chunky-shadow border-4 border-yellow-200">
+                        <div className="text-center mb-6">
+                            <div className="text-6xl mb-2 wobble inline-block">🎀</div>
+                            <h2 className="display-font text-3xl text-pink-500">Hồ Sơ Của Bé</h2>
+                            <p className="text-gray-500">Giới thiệu về bé nào!</p>
+                        </div>
+
+                        <label className="block mb-2 font-bold text-gray-700">Tên của bé</label>
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={(e)=>setName(e.target.value)}
+                            placeholder="Ví dụ: Bé Bin"
+                            className="w-full border-4 border-pink-200 rounded-2xl px-4 py-3 text-lg focus:border-pink-400 outline-none mb-5"
+                            maxLength={20}
+                        />
+
+                        <label className="block mb-2 font-bold text-gray-700">Chọn hình đại diện</label>
+                        <div className="grid grid-cols-7 gap-2 mb-6">
+                            {avatars.map(a => (
+                                <button key={a} onClick={()=>{setAvatar(a); playClick();}}
+                                    className={`aspect-square rounded-2xl text-3xl border-4 transition ${avatar===a ? 'border-pink-500 bg-pink-100 scale-110' : 'border-gray-100 bg-gray-50 hover:border-pink-200'}`}>
+                                    {a}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="flex gap-3">
+                            <button onClick={onClose} className="flex-1 bg-gray-100 text-gray-600 font-bold py-3 rounded-2xl btn-3d border-gray-300">Đóng</button>
+                            <button onClick={()=>{onSave({...profile, name, avatar}); playSuccess();}} 
+                                className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-3 rounded-2xl btn-3d border-pink-700">
+                                Lưu lại ✨
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="${opts.length===3?'cmp-grid':'g2'}">
-                ${opts.map((op,i)=>`<button class="btn-option"
-                    onclick="checkQuizAns(${i})">
-                    ${'ABCD'[i]}. ${esc(String(op))}
-                </button>`).join('')}
-            </div>
-            ${feedbackHTML()}
-        </div>`;
-        return;
-    }
+            );
+        }
 
-    // ── Game over / Quiz result ──
-    if(S.screen==='gameover'||S.screen==='quiz-result'){
-        const isQuiz=S.screen==='quiz-result';
-        app.innerHTML=`<div class="sy tc">
-            <div style="font-size:80px;">${isQuiz?'🏆':'⏰'}</div>
-            <h2 style="font-size:28px;font-weight:700;color:#374151;">
-                Giỏi quá, ${esc(S.name)}!
-            </h2>
-            <div style="background:#FEFCE8;padding:24px;border-radius:24px;border:2px solid #FEF08A;">
-                <p style="font-size:17px;color:#9CA3AF;font-weight:700;">Kết quả của bé:</p>
-                <p style="font-size:80px;font-weight:900;color:#CA8A04;">
-                    ${S.score}${isQuiz?'<span style="font-size:40px;color:#9CA3AF;">/10</span>':''}
-                </p>
-            </div>
-            <button class="btn btn-teal" style="font-size:22px;"
-                onclick="S.screen='setup';render()">CHƠI LẠI ↺</button>
-        </div>`;
-        return;
-    }
-}
+        // Badges Modal
+        function BadgesModal({ profile, onClose }) {
+            return (
+                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 pop">
+                    <div className="bg-white rounded-[40px] max-w-2xl w-full p-6 sm:p-8 chunky-shadow border-4 border-yellow-200 max-h-[90vh] overflow-y-auto">
+                        <div className="text-center mb-6">
+                            <div className="text-6xl mb-2 wobble inline-block">🏆</div>
+                            <h2 className="display-font text-3xl text-orange-500">Bộ Sưu Tập Huy Hiệu</h2>
+                            <p className="text-gray-500">Đã nhận: {profile.badges.length} / {BADGES.length}</p>
+                        </div>
 
-// Refresh start/stop buttons when name changes (without full re-render)
-function _refreshBtns(){
-    const has=S.name.trim();
-    const e=document.getElementById('btnE');
-    const q=document.getElementById('btnQ');
-    if(e)e.className='btn '+(has?'btn-teal':'btn-gray');
-    if(q)q.className='btn '+(has?'btn-red':'btn-gray');
-}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                            {BADGES.map(b => {
+                                const earned = profile.badges.includes(b.id);
+                                return (
+                                    <div key={b.id} className={`text-center bg-gradient-to-br ${earned ? 'from-yellow-100 to-orange-100 border-yellow-300' : 'from-gray-50 to-gray-100 border-gray-200'} rounded-3xl p-4 border-4 ${earned ? '' : 'locked'}`}>
+                                        <div className={`text-5xl mb-2 ${earned ? 'float' : ''}`}>{b.icon}</div>
+                                        <div className="display-font text-sm text-gray-700 leading-tight mb-1">{b.name}</div>
+                                        <div className="text-xs text-gray-500">{b.desc}</div>
+                                        {earned && <div className="mt-2 text-xs font-bold text-orange-500">✓ Đã nhận</div>}
+                                    </div>
+                                );
+                            })}
+                        </div>
 
-// Fix: comparison checkAns passes decoded operators
-// The cmp-btn onclick uses HTML entities for display but we need real chars for logic
-// Override to always decode: rewrite cmp-btn onclick cleanly using data-attr
-document.addEventListener('click',function(e){
-    const b=e.target.closest('.cmp-btn');
-    if(b){e.stopImmediatePropagation();checkAns(b.textContent.trim());}
-},{capture:true});
+                        <button onClick={onClose} className="w-full mt-6 bg-gradient-to-r from-orange-400 to-pink-500 text-white font-bold py-3 rounded-2xl btn-3d border-orange-600">
+                            Tuyệt vời! 🎉
+                        </button>
+                    </div>
+                </div>
+            );
+        }
 
-// ── Init ──────────────────────────────────────────────────────────────
-render();
-</script>
+        // Badge Unlocked Toast
+        function BadgeToast({ badge, onClose }) {
+            useEffect(() => {
+                const t = setTimeout(onClose, 4000);
+                return () => clearTimeout(t);
+            }, []);
+            return (
+                <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-yellow-300 to-orange-400 rounded-3xl px-6 py-4 chunky-shadow flex items-center gap-3 border-4 border-white pop">
+                    <div className="text-5xl wobble">{badge.icon}</div>
+                    <div>
+                        <div className="text-xs font-bold text-orange-900">HUY HIỆU MỚI!</div>
+                        <div className="display-font text-lg text-white text-shadow-sm">{badge.name}</div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Subject Filter Tabs
+        function SubjectTabs({ active, onChange }) {
+            const subjects = [
+                { id:'all', name:'Tất cả', emoji:'🌈', color:'from-violet-400 to-purple-500' },
+                { id:'vietnamese', name:'Tiếng Việt', emoji:'📖', color:'from-pink-400 to-rose-500' },
+                { id:'math', name:'Toán Học', emoji:'🔢', color:'from-blue-400 to-cyan-500' },
+                { id:'english', name:'Tiếng Anh', emoji:'🌍', color:'from-orange-400 to-yellow-500' },
+                { id:'memory', name:'Ghi Nhớ', emoji:'🧠', color:'from-purple-400 to-indigo-500' },
+            ];
+            return (
+                <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 mb-6">
+                    {subjects.map(s => (
+                        <button key={s.id}
+                            onClick={()=>{onChange(s.id); playClick();}}
+                            className={`flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl font-bold whitespace-nowrap transition-all btn-3d ${active === s.id ? `bg-gradient-to-r ${s.color} text-white border-black/20` : 'bg-white text-gray-600 border-gray-200'}`}>
+                            <span className="text-xl">{s.emoji}</span>
+                            <span>{s.name}</span>
+                        </button>
+                    ))}
+                </div>
+            );
+        }
+
+        // Progress Stats
+        function ProgressStats({ profile }) {
+            const total = LESSONS.length;
+            const done = profile.completed.length;
+            const pct = Math.round((done / total) * 100);
+            return (
+                <div className="bg-gradient-to-br from-yellow-100 via-pink-50 to-purple-100 rounded-[36px] p-6 sm:p-8 mb-8 border-4 border-white chunky-shadow relative overflow-hidden">
+                    <div className="absolute -top-6 -right-6 text-9xl opacity-20 spin-slow">🌟</div>
+                    <div className="relative flex flex-col sm:flex-row items-center justify-between gap-6">
+                        <div>
+                            <div className="text-sm font-bold text-purple-600 mb-1">XIN CHÀO {profile.name ? profile.name.toUpperCase() : 'BẠN NHỎ'}! 👋</div>
+                            <h2 className="display-font text-3xl sm:text-4xl text-pink-500 leading-tight">Hôm nay học gì nào?</h2>
+                            <p className="text-gray-600 mt-1">Bé đã hoàn thành <b className="text-orange-500">{done}/{total}</b> bài học</p>
+                        </div>
+                        <div className="relative">
+                            <svg width="120" height="120" viewBox="0 0 120 120" className="transform -rotate-90">
+                                <circle cx="60" cy="60" r="50" fill="none" stroke="#FFE4EC" strokeWidth="14"/>
+                                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#grad1)" strokeWidth="14"
+                                    strokeDasharray={`${2 * Math.PI * 50}`}
+                                    strokeDashoffset={`${2 * Math.PI * 50 * (1 - pct/100)}`}
+                                    strokeLinecap="round"
+                                    style={{transition:'stroke-dashoffset 1s ease'}}/>
+                                <defs>
+                                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stopColor="#FFD93D"/>
+                                        <stop offset="100%" stopColor="#FF8FAB"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="text-center">
+                                    <div className="display-font text-2xl text-orange-500">{pct}%</div>
+                                    <div className="text-xs text-gray-500 font-bold">Tiến độ</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Lesson Card
+        function LessonCard({ lesson, index, completed, onClick }) {
+            return (
+                <button onClick={onClick}
+                    style={{animationDelay: `${index * 60}ms`}}
+                    className="lesson-card slide-up bg-white rounded-[32px] p-5 sm:p-6 text-left chunky-shadow border-4 border-white relative overflow-hidden group">
+                    {completed && (
+                        <div className="absolute top-4 right-4 bg-green-500 text-white w-9 h-9 rounded-full flex items-center justify-center text-lg font-black chunky-shadow-sm z-10">
+                            ✓
+                        </div>
+                    )}
+                    <div className={`bg-gradient-to-br ${lesson.color} w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-4 chunky-shadow-sm group-hover:scale-110 group-hover:rotate-6 transition-transform`}>
+                        {lesson.icon}
+                    </div>
+                    <h3 className="display-font text-lg text-gray-800 leading-tight">{lesson.title}</h3>
+                    <p className="text-sm text-gray-500 mt-1">{lesson.desc}</p>
+                    <div className="mt-4 flex items-center gap-2">
+                        <span className={`${completed ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-orange-500'} px-3 py-1 rounded-full text-xs font-bold`}>
+                            {completed ? '✓ Đã học' : '▶ Bắt đầu'}
+                        </span>
+                    </div>
+                </button>
+            );
+        }
+
+        // Result Screen (sau khi hoàn thành)
+        function ResultScreen({ score, total, stars, onContinue, onHome }) {
+            useEffect(() => {
+                playSuccess();
+                confetti({ particleCount: 200, spread: 120, origin:{y:0.6}, colors:['#FF8FAB','#FFD93D','#6DC1F7','#95E1A4','#C3A6FF'] });
+                setTimeout(() => confetti({ particleCount: 100, spread: 100, origin:{y:0.7, x:0.3} }), 300);
+                setTimeout(() => confetti({ particleCount: 100, spread: 100, origin:{y:0.7, x:0.7} }), 600);
+            }, []);
+
+            const ratio = score / total;
+            const msg = ratio === 1 ? 'HOÀN HẢO!' : ratio >= 0.8 ? 'XUẤT SẮC!' : ratio >= 0.6 ? 'GIỎI LẮM!' : 'CỐ GẮNG HƠN NHÉ!';
+            const emoji = ratio === 1 ? '🏆' : ratio >= 0.8 ? '🌟' : ratio >= 0.6 ? '👏' : '💪';
+
+            return (
+                <div className="fixed inset-0 z-50 bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-400 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-[48px] max-w-lg w-full p-8 text-center chunky-shadow border-8 border-yellow-300 pop relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-300 via-pink-400 to-purple-400"></div>
+                        <div className="text-8xl mb-4 float inline-block">{emoji}</div>
+                        <h2 className="display-font text-4xl sm:text-5xl bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent mb-2">{msg}</h2>
+                        <p className="text-gray-600 mb-6">Bé đã trả lời đúng {score}/{total} câu!</p>
+
+                        <div className="flex justify-center gap-3 mb-6">
+                            {[1,2,3].map(i => (
+                                <div key={i} style={{animationDelay:`${i*200}ms`}}
+                                    className={`text-5xl bounce-in ${i <= stars ? '' : 'opacity-20 grayscale'}`}>⭐</div>
+                            ))}
+                        </div>
+
+                        <div className="bg-gradient-to-r from-yellow-100 to-pink-100 rounded-2xl p-4 mb-6 border-2 border-yellow-300">
+                            <div className="display-font text-2xl text-orange-500">+{stars * 5} ⭐</div>
+                            <div className="text-sm text-gray-600">Sao thưởng nhận được</div>
+                        </div>
+
+                        <div className="flex gap-3">
+                            <button onClick={onHome} className="flex-1 bg-gray-100 text-gray-700 font-bold py-4 rounded-2xl btn-3d border-gray-300">
+                                🏠 Trang chủ
+                            </button>
+                            <button onClick={onContinue} className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-4 rounded-2xl btn-3d border-pink-700">
+                                Học tiếp →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Game Header (khi đang chơi)
+        function GameHeader({ title, onBack, progress, lives }) {
+            return (
+                <div className="max-w-4xl mx-auto flex items-center gap-3 mb-6">
+                    <button onClick={onBack} className="bg-white rounded-2xl w-12 h-12 flex items-center justify-center text-2xl chunky-shadow-sm btn-3d border-gray-200 font-bold">
+                        ✕
+                    </button>
+                    <div className="flex-1 bg-white rounded-full h-5 chunky-shadow-sm border-2 border-white overflow-hidden p-0.5">
+                        <div className="progress-bar h-full rounded-full" style={{width: `${progress}%`}}></div>
+                    </div>
+                    {lives !== undefined && (
+                        <div className="flex gap-1">
+                            {[...Array(3)].map((_,i) => (
+                                <span key={i} className="text-2xl">{i < lives ? '❤️' : '🤍'}</span>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // ============================================================
+        // GAME: ALPHABET VN
+        // ============================================================
+        function AlphabetGame({ lesson, onComplete, onBack }) {
+            const chars = useMemo(() => lesson.range ? ALPHABET_VN.slice(lesson.range[0], lesson.range[1]) : ALPHABET_VN, []);
+            const [qIdx, setQIdx] = useState(0);
+            const [selected, setSelected] = useState(null);
+            const [isCorrect, setIsCorrect] = useState(null);
+            const [score, setScore] = useState(0);
+            const [streak, setStreak] = useState(0);
+            const [options, setOptions] = useState([]);
+            const [done, setDone] = useState(false);
+
+            const total = chars.length;
+            const current = chars[qIdx];
+
+            useEffect(() => {
+                if (qIdx >= total) { setDone(true); return; }
+                const others = ALPHABET_VN.filter(c => c !== current);
+                const wrong = shuffle(others).slice(0, 3);
+                setOptions(shuffle([current, ...wrong]));
+                setSelected(null);
+                setIsCorrect(null);
+                const t = setTimeout(() => speakVnLetter(current), 400);
+                return () => clearTimeout(t);
+            }, [qIdx]);
+
+            const handlePick = (c) => {
+                if (selected) return;
+                setSelected(c);
+                if (c === current) {
+                    setIsCorrect(true);
+                    setScore(s => s + 1);
+                    setStreak(s => s + 1);
+                    playSuccess();
+                    confetti({ particleCount: 60, spread: 60, origin: { y: 0.7 } });
+                    setTimeout(() => setQIdx(i => i + 1), 1200);
+                } else {
+                    setIsCorrect(false);
+                    setStreak(0);
+                    playError();
+                    setTimeout(() => { setSelected(null); setIsCorrect(null); }, 800);
+                }
+            };
+
+            if (done) {
+                const stars = score === total ? 3 : score >= total * 0.7 ? 2 : 1;
+                return <ResultScreen score={score} total={total} stars={stars}
+                    onContinue={() => onComplete({ score, total, streak })}
+                    onHome={() => { onComplete({ score, total, streak }); onBack(); }}/>;
+            }
+
+            const image = ALPHABET_IMAGES[current];
+
+            return (
+                <div className="min-h-screen p-4 sm:p-6">
+                    <GameHeader title={lesson.title} onBack={onBack} progress={(qIdx/total)*100} />
+                    <div className="max-w-3xl mx-auto pop">
+                        <div className="bg-white rounded-[40px] p-6 sm:p-10 chunky-shadow border-4 border-pink-100 relative overflow-hidden">
+                            <div className="absolute top-4 right-6 bg-pink-100 text-pink-500 px-3 py-1 rounded-full text-sm font-bold">
+                                {qIdx + 1}/{total}
+                            </div>
+
+                            <h2 className="display-font text-2xl text-gray-700 text-center mb-2">Đây là chữ gì nhỉ?</h2>
+                            <p className="text-center text-gray-400 mb-6">Bé hãy chọn chữ đúng nhé!</p>
+
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-8">
+                                <div className="relative">
+                                    <div className="bg-gradient-to-br from-pink-100 to-rose-100 w-44 h-44 sm:w-56 sm:h-56 rounded-[40px] flex items-center justify-center border-4 border-pink-200 chunky-shadow-sm">
+                                        <span className="display-font text-[8rem] sm:text-[10rem] bg-gradient-to-br from-pink-500 to-rose-500 bg-clip-text text-transparent leading-none">{current}</span>
+                                    </div>
+                                    <button onClick={()=>speakVnLetter(current)}
+                                        className="absolute -bottom-3 -right-3 w-14 h-14 bg-blue-500 text-white rounded-full text-2xl chunky-shadow-sm btn-3d border-blue-700">
+                                        🔊
+                                    </button>
+                                    {VN_LETTER_PRONOUNCE[current] && (
+                                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-white px-4 py-1 rounded-full border-2 border-pink-300 chunky-shadow-sm whitespace-nowrap">
+                                            <span className="display-font text-pink-500 text-sm">đọc là "{VN_LETTER_PRONOUNCE[current].sound}"</span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {image && (
+                                    <div className="bg-yellow-50 rounded-3xl p-4 text-center border-2 border-yellow-200">
+                                        <div className="text-6xl mb-1 float">{image.emoji}</div>
+                                        <div className="display-font text-sm text-orange-500">{image.word}</div>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3 sm:gap-4 max-w-lg mx-auto">
+                                {options.map(c => {
+                                    const isSel = selected === c;
+                                    const isWin = isSel && isCorrect;
+                                    const isLose = isSel && !isCorrect;
+                                    return (
+                                        <button key={c} onClick={()=>handlePick(c)}
+                                            disabled={!!selected}
+                                            className={`h-24 sm:h-28 rounded-3xl display-font text-5xl sm:text-6xl transition-all btn-3d border-4 ${
+                                                isWin ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white border-green-700' :
+                                                isLose ? 'bg-red-100 text-red-500 border-red-300 shake' :
+                                                'bg-white text-gray-700 border-gray-200 hover:bg-pink-50 hover:border-pink-300'
+                                            }`}>
+                                            {c}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            {streak >= 3 && !isCorrect && (
+                                <div className="mt-6 text-center">
+                                    <span className="inline-block bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 rounded-full font-bold chunky-shadow-sm">
+                                        🔥 Chuỗi đúng: {streak}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============================================================
+        // GAME: COUNTING
+        // ============================================================
+        function CountingGame({ lesson, onComplete, onBack }) {
+            const max = lesson.max || 5;
+            const totalQuestions = 6;
+            const [qIdx, setQIdx] = useState(0);
+            const [target, setTarget] = useState(3);
+            const [item, setItem] = useState('🍎');
+            const [selected, setSelected] = useState(null);
+            const [isCorrect, setIsCorrect] = useState(null);
+            const [score, setScore] = useState(0);
+            const [streak, setStreak] = useState(0);
+            const [done, setDone] = useState(false);
+
+            useEffect(() => {
+                if (qIdx >= totalQuestions) { setDone(true); return; }
+                setTarget(randInt(1, max));
+                setItem(COUNTING_ITEMS[randInt(0, COUNTING_ITEMS.length-1)]);
+                setSelected(null);
+                setIsCorrect(null);
+            }, [qIdx]);
+
+            const handlePick = (n) => {
+                if (selected) return;
+                setSelected(n);
+                if (n === target) {
+                    setIsCorrect(true);
+                    setScore(s => s + 1);
+                    setStreak(s => s + 1);
+                    playSuccess();
+                    speak(`${n}`);
+                    confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+                    setTimeout(() => setQIdx(i => i + 1), 1200);
+                } else {
+                    setIsCorrect(false);
+                    setStreak(0);
+                    playError();
+                    setTimeout(() => { setSelected(null); setIsCorrect(null); }, 800);
+                }
+            };
+
+            if (done) {
+                const stars = score === totalQuestions ? 3 : score >= totalQuestions * 0.7 ? 2 : 1;
+                return <ResultScreen score={score} total={totalQuestions} stars={stars}
+                    onContinue={() => onComplete({ score, total: totalQuestions, streak })}
+                    onHome={() => { onComplete({ score, total: totalQuestions, streak }); onBack(); }}/>;
+            }
+
+            return (
+                <div className="min-h-screen p-4 sm:p-6">
+                    <GameHeader title={lesson.title} onBack={onBack} progress={(qIdx/totalQuestions)*100} />
+                    <div className="max-w-3xl mx-auto pop">
+                        <div className="bg-white rounded-[40px] p-6 sm:p-10 chunky-shadow border-4 border-blue-100 relative">
+                            <div className="absolute top-4 right-6 bg-blue-100 text-blue-500 px-3 py-1 rounded-full text-sm font-bold">
+                                {qIdx + 1}/{totalQuestions}
+                            </div>
+
+                            <h2 className="display-font text-2xl sm:text-3xl text-gray-700 text-center mb-6">
+                                Bé đếm xem có mấy {item} nhé?
+                            </h2>
+
+                            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl p-6 sm:p-8 mb-8 border-4 border-white min-h-[180px] flex flex-wrap justify-center items-center gap-3 sm:gap-4">
+                                {Array.from({ length: target }).map((_,i) => (
+                                    <span key={i}
+                                        style={{animationDelay: `${i*80}ms`}}
+                                        className="text-5xl sm:text-6xl bounce-in inline-block">{item}</span>
+                                ))}
+                            </div>
+
+                            <div className={`grid ${max <= 5 ? 'grid-cols-5' : 'grid-cols-5'} gap-2 sm:gap-3`}>
+                                {Array.from({length: max}, (_,i) => i+1).map(n => {
+                                    const isSel = selected === n;
+                                    const isWin = isSel && isCorrect;
+                                    const isLose = isSel && !isCorrect;
+                                    return (
+                                        <button key={n} onClick={()=>handlePick(n)}
+                                            disabled={!!selected}
+                                            className={`aspect-square rounded-2xl display-font text-3xl sm:text-4xl transition-all btn-3d border-4 ${
+                                                isWin ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white border-green-700' :
+                                                isLose ? 'bg-red-100 text-red-500 border-red-300 shake' :
+                                                'bg-gradient-to-br from-blue-400 to-cyan-500 text-white border-blue-700'
+                                            }`}>
+                                            {n}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============================================================
+        // GAME: MATH (ADDITION / SUBTRACTION)
+        // ============================================================
+        function MathOpGame({ lesson, onComplete, onBack }) {
+            const op = lesson.type === 'addition' ? '+' : '-';
+            const totalQuestions = 6;
+            const [qIdx, setQIdx] = useState(0);
+            const [a, setA] = useState(0);
+            const [b, setB] = useState(0);
+            const [answer, setAnswer] = useState(0);
+            const [options, setOptions] = useState([]);
+            const [selected, setSelected] = useState(null);
+            const [isCorrect, setIsCorrect] = useState(null);
+            const [score, setScore] = useState(0);
+            const [streak, setStreak] = useState(0);
+            const [done, setDone] = useState(false);
+
+            useEffect(() => {
+                if (qIdx >= totalQuestions) { setDone(true); return; }
+                let x, y, ans;
+                if (op === '+') {
+                    x = randInt(1, 6); y = randInt(1, 10 - x);
+                    ans = x + y;
+                } else {
+                    x = randInt(2, 10); y = randInt(1, x - 1);
+                    ans = x - y;
+                }
+                setA(x); setB(y); setAnswer(ans);
+                const wrongs = new Set();
+                while (wrongs.size < 3) {
+                    const w = ans + randInt(-3, 3);
+                    if (w !== ans && w > 0 && w <= 15) wrongs.add(w);
+                }
+                setOptions(shuffle([ans, ...wrongs]));
+                setSelected(null);
+                setIsCorrect(null);
+            }, [qIdx]);
+
+            const handlePick = (n) => {
+                if (selected) return;
+                setSelected(n);
+                if (n === answer) {
+                    setIsCorrect(true);
+                    setScore(s => s + 1);
+                    setStreak(s => s + 1);
+                    playSuccess();
+                    confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+                    setTimeout(() => setQIdx(i => i + 1), 1200);
+                } else {
+                    setIsCorrect(false);
+                    setStreak(0);
+                    playError();
+                    setTimeout(() => { setSelected(null); setIsCorrect(null); }, 800);
+                }
+            };
+
+            if (done) {
+                const stars = score === totalQuestions ? 3 : score >= totalQuestions * 0.7 ? 2 : 1;
+                return <ResultScreen score={score} total={totalQuestions} stars={stars}
+                    onContinue={() => onComplete({ score, total: totalQuestions, streak })}
+                    onHome={() => { onComplete({ score, total: totalQuestions, streak }); onBack(); }}/>;
+            }
+
+            const item = op === '+' ? '🍎' : '🎈';
+            const shownLeft = op === '+' ? a : a;
+            const shownRight = b;
+
+            return (
+                <div className="min-h-screen p-4 sm:p-6">
+                    <GameHeader title={lesson.title} onBack={onBack} progress={(qIdx/totalQuestions)*100} />
+                    <div className="max-w-3xl mx-auto pop">
+                        <div className="bg-white rounded-[40px] p-6 sm:p-10 chunky-shadow border-4 border-green-100 relative">
+                            <div className="absolute top-4 right-6 bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm font-bold">
+                                {qIdx + 1}/{totalQuestions}
+                            </div>
+
+                            <h2 className="display-font text-2xl text-gray-700 text-center mb-6">Bé tính xem bằng mấy?</h2>
+
+                            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-3xl p-6 mb-4 border-4 border-white">
+                                <div className="flex items-center justify-center gap-3 sm:gap-6 flex-wrap">
+                                    <div className="flex gap-1 flex-wrap justify-center max-w-[140px]">
+                                        {Array.from({length: shownLeft}).map((_,i) => (
+                                            <span key={i} className="text-3xl sm:text-4xl bounce-in" style={{animationDelay:`${i*50}ms`}}>{item}</span>
+                                        ))}
+                                    </div>
+                                    <span className="display-font text-5xl sm:text-6xl text-green-600">{op}</span>
+                                    <div className="flex gap-1 flex-wrap justify-center max-w-[140px]">
+                                        {Array.from({length: shownRight}).map((_,i) => (
+                                            <span key={i} className="text-3xl sm:text-4xl bounce-in" style={{animationDelay:`${(shownLeft+i)*50}ms`}}>{op === '-' ? '❌' : item}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="text-center mb-8">
+                                <div className="display-font text-5xl sm:text-6xl text-gray-800 inline-flex items-center gap-3 sm:gap-4 bg-yellow-50 px-6 sm:px-8 py-4 rounded-3xl border-4 border-yellow-200">
+                                    <span>{a}</span>
+                                    <span className="text-green-500">{op}</span>
+                                    <span>{b}</span>
+                                    <span className="text-gray-400">=</span>
+                                    <span className="text-pink-500">?</span>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-lg mx-auto">
+                                {options.map(n => {
+                                    const isSel = selected === n;
+                                    const isWin = isSel && isCorrect;
+                                    const isLose = isSel && !isCorrect;
+                                    return (
+                                        <button key={n} onClick={()=>handlePick(n)}
+                                            disabled={!!selected}
+                                            className={`h-20 rounded-2xl display-font text-4xl transition-all btn-3d border-4 ${
+                                                isWin ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white border-green-700' :
+                                                isLose ? 'bg-red-100 text-red-500 border-red-300 shake' :
+                                                'bg-white text-gray-700 border-gray-200 hover:bg-green-50 hover:border-green-300'
+                                            }`}>
+                                            {n}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============================================================
+        // GAME: COMPARE
+        // ============================================================
+        function CompareGame({ lesson, onComplete, onBack }) {
+            const totalQuestions = 6;
+            const [qIdx, setQIdx] = useState(0);
+            const [a, setA] = useState(3);
+            const [b, setB] = useState(5);
+            const [selected, setSelected] = useState(null);
+            const [isCorrect, setIsCorrect] = useState(null);
+            const [score, setScore] = useState(0);
+            const [streak, setStreak] = useState(0);
+            const [done, setDone] = useState(false);
+
+            useEffect(() => {
+                if (qIdx >= totalQuestions) { setDone(true); return; }
+                const x = randInt(1, 10);
+                let y = randInt(1, 10);
+                setA(x); setB(y);
+                setSelected(null); setIsCorrect(null);
+            }, [qIdx]);
+
+            const correct = a > b ? '>' : a < b ? '<' : '=';
+
+            const handlePick = (sym) => {
+                if (selected) return;
+                setSelected(sym);
+                if (sym === correct) {
+                    setIsCorrect(true);
+                    setScore(s => s + 1);
+                    setStreak(s => s + 1);
+                    playSuccess();
+                    confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+                    setTimeout(() => setQIdx(i => i + 1), 1200);
+                } else {
+                    setIsCorrect(false);
+                    setStreak(0);
+                    playError();
+                    setTimeout(() => { setSelected(null); setIsCorrect(null); }, 800);
+                }
+            };
+
+            if (done) {
+                const stars = score === totalQuestions ? 3 : score >= totalQuestions * 0.7 ? 2 : 1;
+                return <ResultScreen score={score} total={totalQuestions} stars={stars}
+                    onContinue={() => onComplete({ score, total: totalQuestions, streak })}
+                    onHome={() => { onComplete({ score, total: totalQuestions, streak }); onBack(); }}/>;
+            }
+
+            return (
+                <div className="min-h-screen p-4 sm:p-6">
+                    <GameHeader title={lesson.title} onBack={onBack} progress={(qIdx/totalQuestions)*100} />
+                    <div className="max-w-3xl mx-auto pop">
+                        <div className="bg-white rounded-[40px] p-6 sm:p-10 chunky-shadow border-4 border-teal-100 relative">
+                            <div className="absolute top-4 right-6 bg-teal-100 text-teal-600 px-3 py-1 rounded-full text-sm font-bold">
+                                {qIdx + 1}/{totalQuestions}
+                            </div>
+
+                            <h2 className="display-font text-2xl text-gray-700 text-center mb-2">Bé so sánh xem?</h2>
+                            <p className="text-center text-gray-400 mb-6">Chọn dấu đúng vào ô trống</p>
+
+                            <div className="flex items-center justify-center gap-4 sm:gap-6 mb-8">
+                                <div className="bg-gradient-to-br from-blue-100 to-cyan-100 rounded-3xl p-6 sm:p-8 border-4 border-white min-w-[110px] text-center">
+                                    <div className="display-font text-6xl sm:text-7xl text-blue-600">{a}</div>
+                                    <div className="flex flex-wrap gap-0.5 justify-center mt-2">
+                                        {Array.from({length:a}).map((_,i) => <span key={i} className="text-sm">🔵</span>)}
+                                    </div>
+                                </div>
+                                <div className="display-font text-5xl text-gray-400">?</div>
+                                <div className="bg-gradient-to-br from-pink-100 to-rose-100 rounded-3xl p-6 sm:p-8 border-4 border-white min-w-[110px] text-center">
+                                    <div className="display-font text-6xl sm:text-7xl text-pink-600">{b}</div>
+                                    <div className="flex flex-wrap gap-0.5 justify-center mt-2">
+                                        {Array.from({length:b}).map((_,i) => <span key={i} className="text-sm">🔴</span>)}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-3 gap-3 sm:gap-4 max-w-md mx-auto">
+                                {['<','=','>'].map(sym => {
+                                    const isSel = selected === sym;
+                                    const isWin = isSel && isCorrect;
+                                    const isLose = isSel && !isCorrect;
+                                    return (
+                                        <button key={sym} onClick={()=>handlePick(sym)}
+                                            disabled={!!selected}
+                                            className={`h-24 rounded-3xl display-font text-5xl transition-all btn-3d border-4 ${
+                                                isWin ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white border-green-700' :
+                                                isLose ? 'bg-red-100 text-red-500 border-red-300 shake' :
+                                                'bg-gradient-to-br from-teal-400 to-cyan-500 text-white border-teal-700'
+                                            }`}>
+                                            {sym}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============================================================
+        // GAME: SHAPES
+        // ============================================================
+        function ShapesGame({ lesson, onComplete, onBack }) {
+            const shapes = [
+                { name:'Hình tròn', svg:<circle cx="40" cy="40" r="32" fill="currentColor"/>, color:'text-pink-400' },
+                { name:'Hình vuông', svg:<rect x="8" y="8" width="64" height="64" fill="currentColor"/>, color:'text-blue-400' },
+                { name:'Hình tam giác', svg:<polygon points="40,8 72,72 8,72" fill="currentColor"/>, color:'text-green-400' },
+                { name:'Hình chữ nhật', svg:<rect x="4" y="20" width="72" height="40" fill="currentColor"/>, color:'text-orange-400' },
+                { name:'Ngôi sao', svg:<polygon points="40,6 48,30 74,30 53,46 61,70 40,55 19,70 27,46 6,30 32,30" fill="currentColor"/>, color:'text-yellow-400' },
+                { name:'Trái tim', svg:<path d="M40,68 C10,48 10,20 28,20 C36,20 40,26 40,30 C40,26 44,20 52,20 C70,20 70,48 40,68 Z" fill="currentColor"/>, color:'text-red-400' },
+            ];
+            const totalQuestions = 6;
+            const [qIdx, setQIdx] = useState(0);
+            const [current, setCurrent] = useState(shapes[0]);
+            const [options, setOptions] = useState([]);
+            const [selected, setSelected] = useState(null);
+            const [isCorrect, setIsCorrect] = useState(null);
+            const [score, setScore] = useState(0);
+            const [streak, setStreak] = useState(0);
+            const [done, setDone] = useState(false);
+
+            useEffect(() => {
+                if (qIdx >= totalQuestions) { setDone(true); return; }
+                const c = shapes[randInt(0, shapes.length-1)];
+                const others = shapes.filter(s => s.name !== c.name);
+                const wrong = shuffle(others).slice(0, 3);
+                setCurrent(c);
+                setOptions(shuffle([c, ...wrong]));
+                setSelected(null); setIsCorrect(null);
+            }, [qIdx]);
+
+            const handlePick = (name) => {
+                if (selected) return;
+                setSelected(name);
+                if (name === current.name) {
+                    setIsCorrect(true);
+                    setScore(s => s + 1);
+                    setStreak(s => s + 1);
+                    playSuccess();
+                    speak(current.name);
+                    confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+                    setTimeout(() => setQIdx(i => i + 1), 1200);
+                } else {
+                    setIsCorrect(false); setStreak(0); playError();
+                    setTimeout(() => { setSelected(null); setIsCorrect(null); }, 800);
+                }
+            };
+
+            if (done) {
+                const stars = score === totalQuestions ? 3 : score >= totalQuestions * 0.7 ? 2 : 1;
+                return <ResultScreen score={score} total={totalQuestions} stars={stars}
+                    onContinue={() => onComplete({ score, total: totalQuestions, streak })}
+                    onHome={() => { onComplete({ score, total: totalQuestions, streak }); onBack(); }}/>;
+            }
+
+            return (
+                <div className="min-h-screen p-4 sm:p-6">
+                    <GameHeader title={lesson.title} onBack={onBack} progress={(qIdx/totalQuestions)*100} />
+                    <div className="max-w-3xl mx-auto pop">
+                        <div className="bg-white rounded-[40px] p-6 sm:p-10 chunky-shadow border-4 border-indigo-100 relative">
+                            <div className="absolute top-4 right-6 bg-indigo-100 text-indigo-500 px-3 py-1 rounded-full text-sm font-bold">
+                                {qIdx + 1}/{totalQuestions}
+                            </div>
+
+                            <h2 className="display-font text-2xl text-gray-700 text-center mb-6">Đây là hình gì?</h2>
+
+                            <div className="flex justify-center mb-8">
+                                <div className={`bg-gradient-to-br from-indigo-50 to-purple-50 w-48 h-48 rounded-[40px] flex items-center justify-center border-4 border-indigo-200 ${current.color} pop`}>
+                                    <svg viewBox="0 0 80 80" className="w-28 h-28">{current.svg}</svg>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
+                                {options.map(o => {
+                                    const isSel = selected === o.name;
+                                    const isWin = isSel && isCorrect;
+                                    const isLose = isSel && !isCorrect;
+                                    return (
+                                        <button key={o.name} onClick={()=>handlePick(o.name)}
+                                            disabled={!!selected}
+                                            className={`h-16 sm:h-20 rounded-2xl display-font text-xl transition-all btn-3d border-4 ${
+                                                isWin ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white border-green-700' :
+                                                isLose ? 'bg-red-100 text-red-500 border-red-300 shake' :
+                                                'bg-white text-gray-700 border-gray-200 hover:bg-indigo-50 hover:border-indigo-300'
+                                            }`}>
+                                            {o.name}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============================================================
+        // GAME: ENGLISH ALPHABET
+        // ============================================================
+        function EnglishAlphabetGame({ lesson, onComplete, onBack }) {
+            const totalQuestions = 8;
+            const [qIdx, setQIdx] = useState(0);
+            const [current, setCurrent] = useState('A');
+            const [options, setOptions] = useState([]);
+            const [selected, setSelected] = useState(null);
+            const [isCorrect, setIsCorrect] = useState(null);
+            const [score, setScore] = useState(0);
+            const [streak, setStreak] = useState(0);
+            const [done, setDone] = useState(false);
+
+            useEffect(() => {
+                if (qIdx >= totalQuestions) { setDone(true); return; }
+                const c = ALPHABET_EN[randInt(0, ALPHABET_EN.length-1)];
+                const others = ALPHABET_EN.filter(x => x !== c);
+                const wrong = shuffle(others).slice(0, 3);
+                setCurrent(c);
+                setOptions(shuffle([c, ...wrong]));
+                setSelected(null); setIsCorrect(null);
+                const t = setTimeout(() => speak(c, 'en-US'), 400);
+                return () => clearTimeout(t);
+            }, [qIdx]);
+
+            const handlePick = (c) => {
+                if (selected) return;
+                setSelected(c);
+                if (c === current) {
+                    setIsCorrect(true);
+                    setScore(s => s + 1);
+                    setStreak(s => s + 1);
+                    playSuccess();
+                    confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+                    setTimeout(() => setQIdx(i => i + 1), 1200);
+                } else {
+                    setIsCorrect(false); setStreak(0); playError();
+                    setTimeout(() => { setSelected(null); setIsCorrect(null); }, 800);
+                }
+            };
+
+            if (done) {
+                const stars = score === totalQuestions ? 3 : score >= totalQuestions * 0.7 ? 2 : 1;
+                return <ResultScreen score={score} total={totalQuestions} stars={stars}
+                    onContinue={() => onComplete({ score, total: totalQuestions, streak })}
+                    onHome={() => { onComplete({ score, total: totalQuestions, streak }); onBack(); }}/>;
+            }
+
+            return (
+                <div className="min-h-screen p-4 sm:p-6">
+                    <GameHeader title={lesson.title} onBack={onBack} progress={(qIdx/totalQuestions)*100} />
+                    <div className="max-w-3xl mx-auto pop">
+                        <div className="bg-white rounded-[40px] p-6 sm:p-10 chunky-shadow border-4 border-yellow-100 relative">
+                            <div className="absolute top-4 right-6 bg-yellow-100 text-orange-500 px-3 py-1 rounded-full text-sm font-bold">
+                                {qIdx + 1}/{totalQuestions}
+                            </div>
+
+                            <h2 className="display-font text-2xl text-gray-700 text-center mb-6">What letter is this?</h2>
+
+                            <div className="flex justify-center mb-8">
+                                <div className="relative">
+                                    <div className="bg-gradient-to-br from-yellow-100 to-orange-100 w-44 h-44 sm:w-56 sm:h-56 rounded-[40px] flex items-center justify-center border-4 border-yellow-200 chunky-shadow-sm">
+                                        <span className="display-font text-[8rem] sm:text-[10rem] bg-gradient-to-br from-orange-500 to-red-500 bg-clip-text text-transparent leading-none">{current}</span>
+                                    </div>
+                                    <button onClick={()=>speak(current, 'en-US')}
+                                        className="absolute -bottom-3 -right-3 w-14 h-14 bg-orange-500 text-white rounded-full text-2xl chunky-shadow-sm btn-3d border-orange-700">
+                                        🔊
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
+                                {options.map(c => {
+                                    const isSel = selected === c;
+                                    const isWin = isSel && isCorrect;
+                                    const isLose = isSel && !isCorrect;
+                                    return (
+                                        <button key={c} onClick={()=>handlePick(c)}
+                                            disabled={!!selected}
+                                            className={`h-24 rounded-3xl display-font text-5xl transition-all btn-3d border-4 ${
+                                                isWin ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white border-green-700' :
+                                                isLose ? 'bg-red-100 text-red-500 border-red-300 shake' :
+                                                'bg-white text-gray-700 border-gray-200 hover:bg-yellow-50 hover:border-yellow-300'
+                                            }`}>
+                                            {c}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============================================================
+        // GAME: ENGLISH VOCAB
+        // ============================================================
+        function EnglishVocabGame({ lesson, onComplete, onBack }) {
+            const topic = ENGLISH_TOPICS.find(t => t.id === lesson.topic);
+            const totalQuestions = topic.words.length;
+            const [qIdx, setQIdx] = useState(0);
+            const [current, setCurrent] = useState(topic.words[0]);
+            const [options, setOptions] = useState([]);
+            const [selected, setSelected] = useState(null);
+            const [isCorrect, setIsCorrect] = useState(null);
+            const [score, setScore] = useState(0);
+            const [streak, setStreak] = useState(0);
+            const [done, setDone] = useState(false);
+            const [phase, setPhase] = useState('learn'); // learn, quiz
+
+            useEffect(() => {
+                if (phase === 'quiz') {
+                    if (qIdx >= totalQuestions) { setDone(true); return; }
+                    const c = topic.words[qIdx];
+                    const others = topic.words.filter(w => w.en !== c.en);
+                    const wrong = shuffle(others).slice(0, 3);
+                    setCurrent(c);
+                    setOptions(shuffle([c, ...wrong]));
+                    setSelected(null); setIsCorrect(null);
+                }
+            }, [qIdx, phase]);
+
+            const handlePick = (word) => {
+                if (selected) return;
+                setSelected(word.en);
+                if (word.en === current.en) {
+                    setIsCorrect(true);
+                    setScore(s => s + 1);
+                    setStreak(s => s + 1);
+                    playSuccess();
+                    speak(word.en, 'en-US');
+                    confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+                    setTimeout(() => setQIdx(i => i + 1), 1200);
+                } else {
+                    setIsCorrect(false); setStreak(0); playError();
+                    setTimeout(() => { setSelected(null); setIsCorrect(null); }, 800);
+                }
+            };
+
+            if (done) {
+                const stars = score === totalQuestions ? 3 : score >= totalQuestions * 0.7 ? 2 : 1;
+                return <ResultScreen score={score} total={totalQuestions} stars={stars}
+                    onContinue={() => onComplete({ score, total: totalQuestions, streak })}
+                    onHome={() => { onComplete({ score, total: totalQuestions, streak }); onBack(); }}/>;
+            }
+
+            // Phase: Learn
+            if (phase === 'learn') {
+                return (
+                    <div className="min-h-screen p-4 sm:p-6">
+                        <GameHeader title={lesson.title} onBack={onBack} progress={0} />
+                        <div className="max-w-4xl mx-auto pop">
+                            <div className="bg-white rounded-[40px] p-6 sm:p-10 chunky-shadow border-4 border-orange-100">
+                                <div className="text-center mb-6">
+                                    <div className="text-6xl mb-2 wobble inline-block">{topic.emoji}</div>
+                                    <h2 className="display-font text-3xl text-orange-500">{topic.name}</h2>
+                                    <p className="text-gray-500">Hãy cùng học từ vựng nhé!</p>
+                                </div>
+
+                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
+                                    {topic.words.map((w, i) => (
+                                        <button key={w.en} onClick={()=>speak(w.en,'en-US')}
+                                            style={{animationDelay:`${i*60}ms`}}
+                                            className="slide-up bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl p-4 border-4 border-white hover:border-orange-300 transition chunky-shadow-sm">
+                                            <div className="text-5xl mb-2 text-center">{w.emoji}</div>
+                                            <div className="display-font text-center text-orange-500 text-lg">{w.en}</div>
+                                            <div className="text-center text-xs text-gray-500 mt-1">{w.vi}</div>
+                                            <div className="text-center mt-2 text-lg">🔊</div>
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <button onClick={()=>setPhase('quiz')}
+                                    className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-4 rounded-2xl text-xl btn-3d border-orange-700 display-font">
+                                    Sẵn sàng làm bài! 🎯
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            // Phase: Quiz
+            return (
+                <div className="min-h-screen p-4 sm:p-6">
+                    <GameHeader title={lesson.title} onBack={onBack} progress={(qIdx/totalQuestions)*100} />
+                    <div className="max-w-3xl mx-auto pop">
+                        <div className="bg-white rounded-[40px] p-6 sm:p-10 chunky-shadow border-4 border-orange-100 relative">
+                            <div className="absolute top-4 right-6 bg-orange-100 text-orange-500 px-3 py-1 rounded-full text-sm font-bold">
+                                {qIdx + 1}/{totalQuestions}
+                            </div>
+
+                            <h2 className="display-font text-2xl text-gray-700 text-center mb-2">Which one is this?</h2>
+                            <p className="text-center text-gray-400 mb-6">Bé chọn từ tiếng Anh đúng nhé!</p>
+
+                            <div className="flex justify-center mb-8">
+                                <div className="bg-gradient-to-br from-orange-50 to-yellow-50 w-48 h-48 rounded-[40px] flex items-center justify-center border-4 border-orange-200 text-8xl chunky-shadow-sm pop">
+                                    {current.emoji}
+                                </div>
+                            </div>
+
+                            <div className="text-center mb-6">
+                                <div className="inline-block bg-gray-50 px-4 py-2 rounded-full text-gray-600">
+                                    {current.vi}
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
+                                {options.map(w => {
+                                    const isSel = selected === w.en;
+                                    const isWin = isSel && isCorrect;
+                                    const isLose = isSel && !isCorrect;
+                                    return (
+                                        <button key={w.en} onClick={()=>handlePick(w)}
+                                            disabled={!!selected}
+                                            className={`py-4 rounded-2xl display-font text-2xl transition-all btn-3d border-4 ${
+                                                isWin ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white border-green-700' :
+                                                isLose ? 'bg-red-100 text-red-500 border-red-300 shake' :
+                                                'bg-white text-orange-500 border-gray-200 hover:bg-orange-50 hover:border-orange-300'
+                                            }`}>
+                                            {w.en}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============================================================
+        // GAME: WORD-MATCH (VN)
+        // ============================================================
+        function WordMatchGame({ lesson, onComplete, onBack }) {
+            const keys = Object.keys(ALPHABET_IMAGES).slice(0, 10);
+            const totalQuestions = 6;
+            const [qIdx, setQIdx] = useState(0);
+            const [current, setCurrent] = useState('A');
+            const [options, setOptions] = useState([]);
+            const [selected, setSelected] = useState(null);
+            const [isCorrect, setIsCorrect] = useState(null);
+            const [score, setScore] = useState(0);
+            const [streak, setStreak] = useState(0);
+            const [done, setDone] = useState(false);
+
+            useEffect(() => {
+                if (qIdx >= totalQuestions) { setDone(true); return; }
+                const c = keys[randInt(0, keys.length-1)];
+                const others = keys.filter(k => k !== c);
+                const wrong = shuffle(others).slice(0, 3);
+                setCurrent(c);
+                setOptions(shuffle([c, ...wrong]));
+                setSelected(null); setIsCorrect(null);
+            }, [qIdx]);
+
+            const handlePick = (c) => {
+                if (selected) return;
+                setSelected(c);
+                if (c === current) {
+                    setIsCorrect(true);
+                    setScore(s => s + 1);
+                    setStreak(s => s + 1);
+                    playSuccess();
+                    speakVnLetter(current);
+                    confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+                    setTimeout(() => setQIdx(i => i + 1), 1200);
+                } else {
+                    setIsCorrect(false); setStreak(0); playError();
+                    setTimeout(() => { setSelected(null); setIsCorrect(null); }, 800);
+                }
+            };
+
+            if (done) {
+                const stars = score === totalQuestions ? 3 : score >= totalQuestions * 0.7 ? 2 : 1;
+                return <ResultScreen score={score} total={totalQuestions} stars={stars}
+                    onContinue={() => onComplete({ score, total: totalQuestions, streak })}
+                    onHome={() => { onComplete({ score, total: totalQuestions, streak }); onBack(); }}/>;
+            }
+
+            const img = ALPHABET_IMAGES[current];
+
+            return (
+                <div className="min-h-screen p-4 sm:p-6">
+                    <GameHeader title={lesson.title} onBack={onBack} progress={(qIdx/totalQuestions)*100} />
+                    <div className="max-w-3xl mx-auto pop">
+                        <div className="bg-white rounded-[40px] p-6 sm:p-10 chunky-shadow border-4 border-rose-100 relative">
+                            <div className="absolute top-4 right-6 bg-rose-100 text-rose-500 px-3 py-1 rounded-full text-sm font-bold">
+                                {qIdx + 1}/{totalQuestions}
+                            </div>
+
+                            <h2 className="display-font text-2xl text-gray-700 text-center mb-6">
+                                "{img.word}" bắt đầu bằng chữ nào?
+                            </h2>
+
+                            <div className="flex justify-center mb-8">
+                                <div className="bg-gradient-to-br from-rose-50 to-pink-50 w-44 h-44 rounded-[40px] flex items-center justify-center border-4 border-rose-200 text-8xl chunky-shadow-sm float">
+                                    {img.emoji}
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
+                                {options.map(c => {
+                                    const isSel = selected === c;
+                                    const isWin = isSel && isCorrect;
+                                    const isLose = isSel && !isCorrect;
+                                    return (
+                                        <button key={c} onClick={()=>handlePick(c)}
+                                            disabled={!!selected}
+                                            className={`h-24 rounded-3xl display-font text-5xl transition-all btn-3d border-4 ${
+                                                isWin ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white border-green-700' :
+                                                isLose ? 'bg-red-100 text-red-500 border-red-300 shake' :
+                                                'bg-white text-rose-500 border-gray-200 hover:bg-rose-50 hover:border-rose-300'
+                                            }`}>
+                                            {c}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============================================================
+        // GAME: MEMORY MATCH - TRÒ CHƠI GHI NHỚ
+        // ============================================================
+        const MEMORY_DECKS = {
+            animals: {
+                name: 'Động Vật',
+                gradient: 'from-violet-400 to-purple-500',
+                borderColor: 'border-violet-100',
+                bgColor: 'bg-violet-500',
+                accentColor: 'text-violet-500',
+                pairs: [
+                    { id:'cat',   emoji:'🐱', label:'Mèo' },
+                    { id:'dog',   emoji:'🐶', label:'Chó' },
+                    { id:'rabbit',emoji:'🐰', label:'Thỏ' },
+                    { id:'bear',  emoji:'🐻', label:'Gấu' },
+                    { id:'fox',   emoji:'🦊', label:'Cáo' },
+                    { id:'lion',  emoji:'🦁', label:'Sư Tử' },
+                    { id:'panda', emoji:'🐼', label:'Gấu Trúc' },
+                    { id:'frog',  emoji:'🐸', label:'Ếch' },
+                ]
+            },
+            fruits: {
+                name: 'Trái Cây',
+                gradient: 'from-fuchsia-400 to-pink-500',
+                borderColor: 'border-pink-100',
+                bgColor: 'bg-pink-500',
+                accentColor: 'text-pink-500',
+                pairs: [
+                    { id:'apple',     emoji:'🍎', label:'Táo' },
+                    { id:'banana',    emoji:'🍌', label:'Chuối' },
+                    { id:'grape',     emoji:'🍇', label:'Nho' },
+                    { id:'watermelon',emoji:'🍉', label:'Dưa Hấu' },
+                    { id:'strawberry',emoji:'🍓', label:'Dâu' },
+                    { id:'pineapple', emoji:'🍍', label:'Dứa' },
+                    { id:'mango',     emoji:'🥭', label:'Xoài' },
+                    { id:'peach',     emoji:'🍑', label:'Đào' },
+                ]
+            },
+            // Deck đặc biệt: ghép hình với TÊN GỌI đầy đủ của con vật/đồ vật
+            // Ví dụ: 🐱 ghép với "Mèo" (không phải chữ M)
+            words: {
+                name: 'Hình & Từ',
+                gradient: 'from-purple-400 to-indigo-500',
+                borderColor: 'border-indigo-100',
+                bgColor: 'bg-indigo-500',
+                accentColor: 'text-indigo-500',
+                mode: 'image-word',
+                pairs: [
+                    { id:'cat',   emoji:'🐱', word:'Mèo' },
+                    { id:'dog',   emoji:'🐶', word:'Chó' },
+                    { id:'fish',  emoji:'🐟', word:'Cá' },
+                    { id:'cow',   emoji:'🐄', word:'Bò' },
+                    { id:'gaa',   emoji:'🐓', word:'Gà' },
+                    { id:'duck',  emoji:'🦆', word:'Vịt' },
+                    { id:'apple', emoji:'🍎', word:'Táo' },
+                    { id:'car',   emoji:'🚗', word:'Ô Tô' },
+                ]
+            }
+        };
+
+        function MemoryMatchGame({ lesson, onComplete, onBack }) {
+            const deck = MEMORY_DECKS[lesson.deck];
+            const [cards, setCards] = useState([]);
+            const [flipped, setFlipped] = useState([]); // indexes đang lật
+            const [matched, setMatched] = useState([]); // ids đã match
+            const [moves, setMoves] = useState(0);
+            const [startTime] = useState(Date.now());
+            const [elapsed, setElapsed] = useState(0);
+            const [done, setDone] = useState(false);
+            const [wrongPair, setWrongPair] = useState(null); // indexes sai để shake
+            const lockRef = useRef(false);
+
+            // Tạo bộ thẻ (gấp đôi lên và xáo trộn)
+            useEffect(() => {
+                let deckCards;
+                if (deck.mode === 'image-word') {
+                    // Mỗi cặp: thẻ HÌNH + thẻ TỪ (ví dụ 🐱 + "Mèo")
+                    deckCards = deck.pairs.flatMap((p, i) => ([
+                        { uid: `${i}-img`,  pairId: p.id, type:'image', content: p.emoji, label: p.word },
+                        { uid: `${i}-word`, pairId: p.id, type:'word',  content: p.word,  label: p.word },
+                    ]));
+                } else {
+                    // Cặp giống hệt nhau (hình & hình)
+                    deckCards = deck.pairs.flatMap((p, i) => ([
+                        { uid: `${i}-a`, pairId: p.id, type:'emoji', content: p.emoji, label: p.label },
+                        { uid: `${i}-b`, pairId: p.id, type:'emoji', content: p.emoji, label: p.label },
+                    ]));
+                }
+                setCards(shuffle(deckCards));
+            }, []);
+
+            // Timer
+            useEffect(() => {
+                if (done) return;
+                const t = setInterval(() => setElapsed(Math.floor((Date.now() - startTime) / 1000)), 500);
+                return () => clearInterval(t);
+            }, [done]);
+
+            // Kiểm tra hoàn thành
+            useEffect(() => {
+                if (cards.length > 0 && matched.length === deck.pairs.length) {
+                    setTimeout(() => setDone(true), 600);
+                }
+            }, [matched, cards]);
+
+            const handleFlip = (idx) => {
+                if (lockRef.current) return;
+                if (flipped.includes(idx)) return;
+                if (matched.includes(cards[idx].pairId)) return;
+                if (flipped.length >= 2) return;
+
+                playClick();
+                const newFlipped = [...flipped, idx];
+                setFlipped(newFlipped);
+
+                if (newFlipped.length === 2) {
+                    lockRef.current = true;
+                    setMoves(m => m + 1);
+                    const [a, b] = newFlipped;
+                    if (cards[a].pairId === cards[b].pairId) {
+                        // Match!
+                        setTimeout(() => {
+                            playSuccess();
+                            setMatched(m => [...m, cards[a].pairId]);
+                            setFlipped([]);
+                            lockRef.current = false;
+                            confetti({ particleCount: 40, spread: 50, origin: { y: 0.6 } });
+                            // Deck Hình & Từ: đọc từ tiếng Việt đầy đủ (ví dụ "Con Mèo")
+                            if (deck.mode === 'image-word') {
+                                const pair = deck.pairs.find(p => p.id === cards[a].pairId);
+                                if (pair) speak(pair.word);
+                            }
+                        }, 500);
+                    } else {
+                        // Sai
+                        setWrongPair([a, b]);
+                        playError();
+                        setTimeout(() => {
+                            setFlipped([]);
+                            setWrongPair(null);
+                            lockRef.current = false;
+                        }, 1000);
+                    }
+                }
+            };
+
+            const progress = (matched.length / deck.pairs.length) * 100;
+            const fmtTime = (s) => `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
+
+            if (done) {
+                // Scoring: càng ít moves càng nhiều sao
+                const perfectMoves = deck.pairs.length;
+                const ratio = perfectMoves / Math.max(moves, perfectMoves);
+                const stars = ratio >= 0.8 ? 3 : ratio >= 0.6 ? 2 : 1;
+                const score = stars;
+                return <ResultScreen score={score} total={3} stars={stars}
+                    onContinue={() => onComplete({ score: deck.pairs.length, total: deck.pairs.length, streak: 0 })}
+                    onHome={() => { onComplete({ score: deck.pairs.length, total: deck.pairs.length, streak: 0 }); onBack(); }}/>;
+            }
+
+            return (
+                <div className="min-h-screen p-4 sm:p-6">
+                    <GameHeader title={lesson.title} onBack={onBack} progress={progress} />
+                    <div className="max-w-4xl mx-auto pop">
+                        <div className={`bg-white rounded-[40px] p-4 sm:p-8 chunky-shadow border-4 ${deck.borderColor} relative`}>
+                            {/* Stats */}
+                            <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
+                                <div className="flex items-center gap-3">
+                                    <div className={`text-4xl`}>{lesson.icon}</div>
+                                    <div>
+                                        <h2 className={`display-font text-xl ${deck.accentColor}`}>Tìm các cặp giống nhau!</h2>
+                                        <p className="text-sm text-gray-500">Bé lật 2 thẻ cùng một lúc</p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <div className="bg-yellow-50 border-2 border-yellow-200 rounded-2xl px-3 py-2 text-center">
+                                        <div className="text-xs text-gray-500 font-bold">LƯỢT</div>
+                                        <div className="display-font text-xl text-orange-500">{moves}</div>
+                                    </div>
+                                    <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl px-3 py-2 text-center">
+                                        <div className="text-xs text-gray-500 font-bold">GIỜ</div>
+                                        <div className="display-font text-xl text-blue-500">{fmtTime(elapsed)}</div>
+                                    </div>
+                                    <div className="bg-green-50 border-2 border-green-200 rounded-2xl px-3 py-2 text-center">
+                                        <div className="text-xs text-gray-500 font-bold">CẶP</div>
+                                        <div className="display-font text-xl text-green-500">{matched.length}/{deck.pairs.length}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Cards grid */}
+                            <div className="grid grid-cols-4 gap-2 sm:gap-3 mt-4">
+                                {cards.map((card, idx) => {
+                                    const isFlipped = flipped.includes(idx) || matched.includes(card.pairId);
+                                    const isMatched = matched.includes(card.pairId);
+                                    const isWrong = wrongPair && wrongPair.includes(idx);
+                                    return (
+                                        <button key={card.uid}
+                                            onClick={() => handleFlip(idx)}
+                                            disabled={isMatched}
+                                            className={`aspect-square rounded-2xl sm:rounded-3xl relative transition-all duration-300 ${isWrong ? 'shake' : ''} ${isFlipped ? '' : 'hover:scale-105'}`}
+                                            style={{ perspective: '600px' }}>
+                                            <div className={`absolute inset-0 transition-transform duration-500`}
+                                                style={{
+                                                    transformStyle: 'preserve-3d',
+                                                    transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
+                                                }}>
+                                                {/* Mặt sau thẻ (hỏi) */}
+                                                <div className={`absolute inset-0 bg-gradient-to-br ${deck.gradient} rounded-2xl sm:rounded-3xl flex items-center justify-center chunky-shadow-sm border-4 border-white`}
+                                                    style={{ backfaceVisibility: 'hidden' }}>
+                                                    <div className="text-3xl sm:text-5xl text-white/80">?</div>
+                                                </div>
+                                                {/* Mặt trước (nội dung) */}
+                                                <div className={`absolute inset-0 rounded-2xl sm:rounded-3xl flex items-center justify-center chunky-shadow-sm border-4 ${isMatched ? 'bg-gradient-to-br from-green-100 to-emerald-100 border-green-300' : 'bg-white border-yellow-200'}`}
+                                                    style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
+                                                    {card.type === 'word' ? (
+                                                        <span className="display-font text-2xl sm:text-3xl text-center px-2 bg-gradient-to-br from-indigo-500 to-purple-500 bg-clip-text text-transparent leading-tight">{card.content}</span>
+                                                    ) : (
+                                                        <span className="text-4xl sm:text-6xl">{card.content}</span>
+                                                    )}
+                                                    {isMatched && (
+                                                        <div className="absolute top-1 right-1 bg-green-500 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center text-xs font-bold">✓</div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Matched labels */}
+                            {matched.length > 0 && (
+                                <div className="mt-6 pt-4 border-t-2 border-dashed border-gray-200">
+                                    <div className="text-xs font-bold text-gray-400 mb-2 text-center">ĐÃ TÌM THẤY</div>
+                                    <div className="flex flex-wrap gap-2 justify-center">
+                                        {matched.map(id => {
+                                            const p = deck.pairs.find(x => x.id === id);
+                                            return (
+                                                <div key={id} className="bg-green-50 border-2 border-green-200 rounded-full px-3 py-1 text-sm font-bold text-green-700 flex items-center gap-1 bounce-in">
+                                                    <span>{p.emoji}</span>
+                                                    <span>{p.word || p.label}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============================================================
+        // MAIN APP
+        // ============================================================
+        function App() {
+            const [profile, setProfile] = useState(loadState);
+            const [activeLesson, setActiveLesson] = useState(null);
+            const [showProfile, setShowProfile] = useState(false);
+            const [showBadges, setShowBadges] = useState(false);
+            const [subject, setSubject] = useState('all');
+            const [newBadge, setNewBadge] = useState(null);
+
+            // Init: show profile if no name
+            useEffect(() => {
+                if (!profile.name) setShowProfile(true);
+            }, []);
+
+            useEffect(() => saveState(profile), [profile]);
+
+            // preload voices
+            useEffect(() => {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.getVoices();
+                    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+                }
+            }, []);
+
+            const handleComplete = (lessonId) => ({ score, total, streak }) => {
+                setProfile(p => {
+                    const np = { ...p };
+                    if (!np.completed.includes(lessonId)) {
+                        np.completed = [...np.completed, lessonId];
+                    }
+                    // Stars: 5 base + 1 per correct
+                    const earnedStars = 5 + score;
+                    np.stars = p.stars + earnedStars;
+                    np.bestStreak = Math.max(p.bestStreak, streak || 0);
+                    // Check badges
+                    const newlyEarned = BADGES.filter(b => !np.badges.includes(b.id) && b.req(np));
+                    if (newlyEarned.length > 0) {
+                        np.badges = [...np.badges, ...newlyEarned.map(b => b.id)];
+                        setTimeout(() => setNewBadge(newlyEarned[0]), 1500);
+                    }
+                    return np;
+                });
+            };
+
+            // Render active game
+            if (activeLesson) {
+                const commonProps = {
+                    lesson: activeLesson,
+                    onBack: () => setActiveLesson(null),
+                    onComplete: (result) => { handleComplete(activeLesson.id)(result); },
+                };
+                switch (activeLesson.type) {
+                    case 'alphabet-vn': return <AlphabetGame {...commonProps} />;
+                    case 'word-match': return <WordMatchGame {...commonProps} />;
+                    case 'counting': return <CountingGame {...commonProps} />;
+                    case 'addition':
+                    case 'subtraction': return <MathOpGame {...commonProps} />;
+                    case 'compare': return <CompareGame {...commonProps} />;
+                    case 'shapes': return <ShapesGame {...commonProps} />;
+                    case 'alphabet-en': return <EnglishAlphabetGame {...commonProps} />;
+                    case 'vocab': return <EnglishVocabGame {...commonProps} />;
+                    case 'memory': return <MemoryMatchGame {...commonProps} />;
+                    default: return null;
+                }
+            }
+
+            const filtered = subject === 'all' ? LESSONS : LESSONS.filter(l => l.subject === subject);
+
+            return (
+                <div className="relative min-h-screen">
+                    <Clouds />
+
+                    <Header profile={profile}
+                        onProfileClick={()=>setShowProfile(true)}
+                        onBadgesClick={()=>setShowBadges(true)}
+                        onHome={()=>setSubject('all')} />
+
+                    <main className="max-w-7xl mx-auto p-4 sm:p-6 relative z-10">
+                        <ProgressStats profile={profile} />
+                        <SubjectTabs active={subject} onChange={setSubject} />
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+                            {filtered.map((l, i) => (
+                                <LessonCard key={l.id} lesson={l} index={i}
+                                    completed={profile.completed.includes(l.id)}
+                                    onClick={()=>{ setActiveLesson(l); playClick(); }}/>
+                            ))}
+                        </div>
+
+                        <footer className="mt-16 text-center text-gray-400 text-sm pb-8">
+                            <div className="text-4xl mb-2">🌱🌸🌷🌻</div>
+                            <p className="display-font text-base text-pink-400">Vườn Ươm Tài Năng</p>
+                            <p className="text-xs mt-1">Chương trình học dành cho bé 4-6 tuổi · Phát triển toàn diện</p>
+                        </footer>
+                    </main>
+
+                    {showProfile && <ProfileModal profile={profile} onSave={(p)=>{setProfile(p); setShowProfile(false);}} onClose={()=>setShowProfile(false)} />}
+                    {showBadges && <BadgesModal profile={profile} onClose={()=>setShowBadges(false)} />}
+                    {newBadge && <BadgeToast badge={newBadge} onClose={()=>setNewBadge(null)} />}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
